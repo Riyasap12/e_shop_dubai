@@ -92,7 +92,7 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   Locale? _locale;
 
   setLocale(Locale locale) {
@@ -113,7 +113,11 @@ class _MyAppState extends State<MyApp> {
     });
     super.didChangeDependencies();
   }
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
@@ -202,7 +206,7 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             initialRoute: '/',
             routes: {
-              '/': (context) => Splash(),
+              '/': (context) => Splash(initialLink: widget.initialLink),
               '/home': (context) => Dashboard(),
             },
 

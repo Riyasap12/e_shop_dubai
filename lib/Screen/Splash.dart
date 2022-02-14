@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:eshop/Provider/SettingProvider.dart';
 import 'package:eshop/Screen/Intro_Slider.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 //splash screen of app
 class Splash extends StatefulWidget {
+    Splash({this.initialLink});
+    final PendingDynamicLinkData? initialLink;
     @override
     _SplashScreen createState() => _SplashScreen();
 }
@@ -20,10 +23,18 @@ class Splash extends StatefulWidget {
 class _SplashScreen extends State<Splash> {
     final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+    String link = 'aaaa';
+getLink(){
+    SettingProvider settingsProvider =
+    Provider.of<SettingProvider>(context, listen: false);
+    settingsProvider.setDynamicLink = (widget.initialLink?.link.queryParameters['refId'].toString() ?? "");
+    link = settingsProvider.dynamicLink.toString();
+}
 
     @override
     void initState() {
         super.initState();
+        getLink();
         startTime();
     }
 

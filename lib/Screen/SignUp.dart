@@ -35,7 +35,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
   final mobileController = TextEditingController();
   final ccodeController = TextEditingController();
   final passwordController = TextEditingController();
-  final referController = TextEditingController();
+  var referController = TextEditingController();
   int count = 1;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   String? name,
@@ -66,6 +66,14 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
       _playAnimation();
       checkNetwork();
     }
+  }
+
+  setDynamicLink(){
+    SettingProvider settingsProvider =
+    Provider.of<SettingProvider>(this.context, listen: false);
+
+    referController.text = settingsProvider.dynamicLink;
+
   }
 
   getUserDetails() async {
@@ -549,6 +557,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    setDynamicLink();
     getUserDetails();
     buttonController = AnimationController(
         duration: Duration(milliseconds: 2000), vsync: this);

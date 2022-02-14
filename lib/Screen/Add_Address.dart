@@ -718,7 +718,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                       focusNode: locationFocus,
                       onPressed: () async {
                         Position position = await Geolocator.getCurrentPosition(
-                            desiredAccuracy: LocationAccuracy.high);
+                            desiredAccuracy: LocationAccuracy.bestForNavigation);
 
                         await Navigator.push(
                             context,

@@ -274,10 +274,13 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
   }
 
   Future<void> _createDynamicLink(bool short, String refId) async {
+    SettingProvider settingsProvider =
+    Provider.of<SettingProvider>(context, listen: false);
+    print("~~~${settingsProvider.referalCode}");
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://tamyeezbidiya.page.link',
       link: Uri.parse(
-          'http://supermarket.tamyeez.bidiya.com/?refId=$refId'),
+          'http://supermarket.tamyeez.bidiya.com/?refId=${settingsProvider.referalCode}'),
       androidParameters: AndroidParameters(
         packageName: 'supermarket.tamyeez.bidiya',
         minimumVersion: 21,

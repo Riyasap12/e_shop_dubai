@@ -52,9 +52,8 @@ class SettingProvider {
     return _sharedPreferences.getString(key);
   }
 
-  String? setDynamicLink(String key) {
-    return _sharedPreferences.getString(key);
-  }
+
+  set setDynamicLink(String token) => _sharedPreferences.setString(DYNAMICLINK, token);
 
   void setPrefrenceBool(String key, bool value) async {
     _sharedPreferences.setBool(key, value);

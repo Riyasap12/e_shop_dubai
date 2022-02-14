@@ -2,10 +2,12 @@ import 'package:eshop/Helper/Color.dart';
 import 'package:eshop/Helper/PushNotificationService.dart';
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Helper/String.dart';
+import 'package:eshop/Provider/SettingProvider.dart';
 import 'package:eshop/Provider/UserProvider.dart';
 import 'package:eshop/Screen/Favorite.dart';
 import 'package:eshop/Screen/Login.dart';
 import 'package:eshop/Screen/MyProfile.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +21,6 @@ import 'Search.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -27,6 +28,7 @@ class Dashboard extends StatefulWidget {
 class _HomePageState extends State<Dashboard> with TickerProviderStateMixin {
   int _selBottom = 0;
   late TabController _tabController;
+
 
   @override
   void initState() {
