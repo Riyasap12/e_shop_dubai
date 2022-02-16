@@ -1,0 +1,13 @@
+// This is a generated file; do not edit or check into version control.
+FLUTTER_ROOT=/home/shreesoftech/snap/flutter/common/flutter
+FLUTTER_APPLICATION_PATH=/media/shreesoftech/e4ddb1cc-941c-4d5d-b86e-dc0ee115f169/Flutter Projects/eShop Single Vendor/eshop(customer app) v2.1.0 .1/eshop/downloads_path_provider/example
+COCOAPODS_PARALLEL_CODE_SIGN=true
+FLUTTER_TARGET=lib/main.dart
+FLUTTER_BUILD_DIR=build
+FLUTTER_BUILD_NAME=1.0.0
+FLUTTER_BUILD_NUMBER=1
+EXCLUDED_ARCHS[sdk=iphonesimulator*]=i386
+DART_OBFUSCATION=false
+TRACK_WIDGET_CREATION=false
+TREE_SHAKE_ICONS=false
+PACKAGE_CONFIG=.packages

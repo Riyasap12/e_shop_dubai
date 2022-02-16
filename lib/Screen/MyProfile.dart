@@ -627,11 +627,12 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
           } else if (title == getTranslated(context, 'RATE_US')) {
             _openStoreListing();
           } else if (title == getTranslated(context, 'SHARE_APP')) {
-            var str =
-                "$appName\n\n${getTranslated(context, 'APPFIND')}$androidLink$packageName\n\n ${getTranslated(context, 'IOSLBL')}\n$iosLink$iosPackage";
-           await _createDynamicLink(
+             await _createDynamicLink(
                 true, "12345");
-            await Share.share(_linkMessage);
+             var str =
+                 "$appName\n\n${getTranslated(context, 'APPFIND')}\n\n$_linkMessage";
+
+             await Share.share(str);
           } else if (title == getTranslated(context, 'ABOUT_LBL')) {
             Navigator.push(
                 context,

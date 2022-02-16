@@ -60,15 +60,15 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
   List<String?> paymentMethodList = [];
   List<String> paymentIconList = [
     'assets/images/cod.svg',
-    'assets/images/paypal.svg',
-    'assets/images/payu.svg',
-    'assets/images/rozerpay.svg',
-    'assets/images/paystack.svg',
-    'assets/images/flutterwave.svg',
-    'assets/images/stripe.svg',
-    'assets/images/paytm.svg',
-    Platform.isIOS ? 'assets/images/applepay.svg' : 'assets/images/gpay.svg',
-    'assets/images/banktransfer.svg',
+    // 'assets/images/paypal.svg',
+    // 'assets/images/payu.svg',
+    // 'assets/images/rozerpay.svg',
+    // 'assets/images/paystack.svg',
+    // 'assets/images/flutterwave.svg',
+    // 'assets/images/stripe.svg',
+    // 'assets/images/paytm.svg',
+    // Platform.isIOS ? 'assets/images/applepay.svg' : 'assets/images/gpay.svg',
+    // 'assets/images/banktransfer.svg',
   ];
 
   Animation? buttonSqueezeanimation;
@@ -85,17 +85,17 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
     new Future.delayed(Duration.zero, () {
       paymentMethodList = [
         getTranslated(context, 'COD_LBL'),
-        getTranslated(context, 'PAYPAL_LBL'),
-        getTranslated(context, 'PAYUMONEY_LBL'),
-        getTranslated(context, 'RAZORPAY_LBL'),
-        getTranslated(context, 'PAYSTACK_LBL'),
-        getTranslated(context, 'FLUTTERWAVE_LBL'),
-        getTranslated(context, 'STRIPE_LBL'),
-        getTranslated(context, 'PAYTM_LBL'),
-        Platform.isIOS
-            ? getTranslated(context, 'APPLEPAY')
-            : getTranslated(context, 'GPAY'),
-        getTranslated(context, 'BANKTRAN'),
+        // getTranslated(context, 'PAYPAL_LBL'),
+        // getTranslated(context, 'PAYUMONEY_LBL'),
+        // getTranslated(context, 'RAZORPAY_LBL'),
+        // getTranslated(context, 'PAYSTACK_LBL'),
+        // getTranslated(context, 'FLUTTERWAVE_LBL'),
+        // getTranslated(context, 'STRIPE_LBL'),
+        // getTranslated(context, 'PAYTM_LBL'),
+        // Platform.isIOS
+        //     ? getTranslated(context, 'APPLEPAY')
+        //     : getTranslated(context, 'GPAY'),
+        // getTranslated(context, 'BANKTRAN'),
       ];
     });
     if (widget.msg != '')
@@ -343,26 +343,26 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
                                               itemBuilder: (context, index) {
                                                 if (index == 0 && cod)
                                                   return paymentItem(index);
-                                                else if (index == 1 && paypal)
-                                                  return paymentItem(index);
-                                                else if (index == 2 && paumoney)
-                                                  return paymentItem(index);
-                                                else if (index == 3 && razorpay)
-                                                  return paymentItem(index);
-                                                else if (index == 4 && paystack)
-                                                  return paymentItem(index);
-                                                else if (index == 5 &&
-                                                    flutterwave)
-                                                  return paymentItem(index);
-                                                else if (index == 6 && stripe)
-                                                  return paymentItem(index);
-                                                else if (index == 7 && paytm)
-                                                  return paymentItem(index);
-                                                else if (index == 8 && gpay)
-                                                  return paymentItem(index);
-                                                else if (index == 9 &&
-                                                    bankTransfer)
-                                                  return paymentItem(index);
+                                                // else if (index == 1 && paypal)
+                                                //   return paymentItem(index);
+                                                // else if (index == 2 && paumoney)
+                                                //   return paymentItem(index);
+                                                // else if (index == 3 && razorpay)
+                                                //   return paymentItem(index);
+                                                // else if (index == 4 && paystack)
+                                                //   return paymentItem(index);
+                                                // else if (index == 5 &&
+                                                //     flutterwave)
+                                                //   return paymentItem(index);
+                                                // else if (index == 6 && stripe)
+                                                //   return paymentItem(index);
+                                                // else if (index == 7 && paytm)
+                                                //   return paymentItem(index);
+                                                // else if (index == 8 && gpay)
+                                                //   return paymentItem(index);
+                                                // else if (index == 9 &&
+                                                //     bankTransfer)
+                                                //   return paymentItem(index);
                                                 else
                                                   return Container();
                                               }),

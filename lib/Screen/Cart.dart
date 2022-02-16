@@ -2543,9 +2543,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                           "apple_pay");
                                                     }*/
 
-    else if (payMethod == getTranslated(context, 'BANKTRAN'))
-      bankTransfer();
-    else
+    // else if (payMethod == getTranslated(context, 'BANKTRAN'))
+    //   bankTransfer();
+    // else
       placeOrder('');
   }
 
@@ -2800,27 +2800,27 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
             : sec.varientId;
         quantity = quantity != null ? quantity + "," + sec.qty! : sec.qty;
       }
-      String? payVia;
-      if (payMethod == getTranslated(context, 'COD_LBL'))
-        payVia = "COD";
-      else if (payMethod == getTranslated(context, 'PAYPAL_LBL'))
-        payVia = "PayPal";
-      else if (payMethod == getTranslated(context, 'PAYUMONEY_LBL'))
-        payVia = "PayUMoney";
-      else if (payMethod == getTranslated(context, 'RAZORPAY_LBL'))
-        payVia = "RazorPay";
-      else if (payMethod == getTranslated(context, 'PAYSTACK_LBL'))
-        payVia = "Paystack";
-      else if (payMethod == getTranslated(context, 'FLUTTERWAVE_LBL'))
-        payVia = "Flutterwave";
-      else if (payMethod == getTranslated(context, 'STRIPE_LBL'))
-        payVia = "Stripe";
-      else if (payMethod == getTranslated(context, 'PAYTM_LBL'))
-        payVia = "Paytm";
-      else if (payMethod == "Wallet")
-        payVia = "Wallet";
-      else if (payMethod == getTranslated(context, 'BANKTRAN'))
-        payVia = "bank_transfer";
+      String payVia = "COD";
+      // if (payMethod == getTranslated(context, 'COD_LBL'))
+      //   payVia = "COD";
+      // else if (payMethod == getTranslated(context, 'PAYPAL_LBL'))
+      //   payVia = "PayPal";
+      // else if (payMethod == getTranslated(context, 'PAYUMONEY_LBL'))
+      //   payVia = "PayUMoney";
+      // else if (payMethod == getTranslated(context, 'RAZORPAY_LBL'))
+      //   payVia = "RazorPay";
+      // else if (payMethod == getTranslated(context, 'PAYSTACK_LBL'))
+      //   payVia = "Paystack";
+      // else if (payMethod == getTranslated(context, 'FLUTTERWAVE_LBL'))
+      //   payVia = "Flutterwave";
+      // else if (payMethod == getTranslated(context, 'STRIPE_LBL'))
+      //   payVia = "Stripe";
+      // else if (payMethod == getTranslated(context, 'PAYTM_LBL'))
+      //   payVia = "Paytm";
+      // else if (payMethod == "Wallet")
+      //   payVia = "Wallet";
+      // else if (payMethod == getTranslated(context, 'BANKTRAN'))
+      //   payVia = "bank_transfer";
       try {
         var parameter = {
           USER_ID: CUR_USERID,
@@ -3686,7 +3686,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                         onPressed: () {
                           Navigator.pop(context);
 
-                          doPayment();
+                          placeOrder('');///Only COD available now
+                          // doPayment();
                         })
                   ],
                 )),
