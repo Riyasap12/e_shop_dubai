@@ -1,37 +1,34 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Provider/SettingProvider.dart';
 import 'package:eshop/Provider/UserProvider.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:convert';
 
-import 'package:eshop/Helper/Session.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+// import 'package:speech_to_text/speech_recognition_error.dart';
+// import 'package:speech_to_text/speech_recognition_result.dart';
+// import 'package:speech_to_text/speech_to_text.dart';
+
 import '../Helper/AppBtn.dart';
 import '../Helper/Color.dart';
 import '../Helper/Constant.dart';
 import '../Helper/String.dart';
-
 import '../Model/Section_Model.dart';
+import 'Cart.dart';
 import 'HomePage.dart';
+import 'Login.dart';
 import 'ProductList.dart';
 import 'Product_Detail.dart';
-import 'Login.dart';
-import 'Cart.dart';
-import 'package:speech_to_text/speech_recognition_error.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart';
 
 class Search extends StatefulWidget {
-
-
-
   @override
   _SearchState createState() => _SearchState();
 }
@@ -67,8 +64,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
   String lastStatus = '';
   String _currentLocaleId = '';
   String lastWords = '';
-  List<LocaleName> _localeNames = [];
-  final SpeechToText speech = SpeechToText();
+  // List<LocaleName> _localeNames = [];
+  // final SpeechToText speech = SpeechToText();
   late StateSetter setStater;
   ChoiceChip? tagChip;
   late UserProvider userProvider;
@@ -192,8 +189,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
-    userProvider=Provider.of<UserProvider>(context);
+    userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
         key: _scaffoldKey,
@@ -215,11 +211,7 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
           }),
           backgroundColor: Theme.of(context).colorScheme.white,
           title: TextField(
-            style: TextStyle(
-                color: Theme.of(
-                    context)
-                    .colorScheme
-                    .fontColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.fontColor),
             controller: _controller,
             autofocus: true,
             decoration: InputDecoration(
@@ -227,10 +219,12 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
               hintText: getTranslated(context, 'SEARCH_LBL'),
               hintStyle: TextStyle(color: colors.primary.withOpacity(0.5)),
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Theme.of(context).colorScheme.white),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.white),
               ),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Theme.of(context).colorScheme.white),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.white),
               ),
             ),
             // onChanged: (query) => updateSearchQuery(query),
@@ -254,10 +248,10 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                     ),
                     onPressed: () {
                       lastWords = '';
-                      if (!_hasSpeech)
-                        initSpeechState();
-                      else
-                        showSpeechDialog();
+                      // if (!_hasSpeech)
+                      //   initSpeechState();
+                      // else
+                      //   showSpeechDialog();
                     },
                   )
           ],
@@ -281,11 +275,12 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
     _controllerList[index].text =
         model.prVarientList![model.selVarient!].cartCount!;
 
-    double price = double.parse(model.prVarientList![model.selVarient!].disPrice!);
+    double price =
+        double.parse(model.prVarientList![model.selVarient!].disPrice!);
     if (price == 0)
       price = double.parse(model.prVarientList![model.selVarient!].price!);
 
-    List att=[], val=[];
+    List att = [], val = [];
     if (model.prVarientList![model.selVarient!].attr_name != null) {
       att = model.prVarientList![model.selVarient!].attr_name!.split(',');
       val = model.prVarientList![model.selVarient!].varient_value!.split(',');
@@ -331,7 +326,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                   .textTheme
                                   .subtitle2!
                                   .copyWith(
-                                    color: Theme.of(context).colorScheme.lightBlack,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .lightBlack,
                                   ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
@@ -339,9 +336,17 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                             Row(
                               children: <Widget>[
                                 Text(
-                                    CUR_CURRENCY! + " " + price.toString() + " ",
-                                    style:
-                                        Theme.of(context).textTheme.subtitle1!.copyWith(color:  Theme.of(context).colorScheme.fontColor)),
+                                    CUR_CURRENCY! +
+                                        " " +
+                                        price.toString() +
+                                        " ",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .fontColor)),
                                 Text(
                                   double.parse(model
                                               .prVarientList![model.selVarient!]
@@ -349,7 +354,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                           0
                                       ? CUR_CURRENCY! +
                                           "" +
-                                          model.prVarientList![model.selVarient!]
+                                          model
+                                              .prVarientList![model.selVarient!]
                                               .price!
                                       : "",
                                   style: Theme.of(context)
@@ -380,7 +386,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                 .textTheme
                                                 .subtitle2!
                                                 .copyWith(
-                                                    color: Theme.of(context).colorScheme.lightBlack),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .lightBlack),
                                           ),
                                         ),
                                         Padding(
@@ -392,7 +400,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                 .textTheme
                                                 .subtitle2!
                                                 .copyWith(
-                                                    color: Theme.of(context).colorScheme.lightBlack,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .lightBlack,
                                                     fontWeight:
                                                         FontWeight.bold),
                                           ),
@@ -441,11 +451,15 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                       child: Icon(
                                                         Icons.remove,
                                                         size: 14,
-                                                        color: Theme.of(context).colorScheme.fontColor,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .fontColor,
                                                       ),
                                                       decoration: BoxDecoration(
                                                           color:
-                                                              Theme.of(context).colorScheme.lightWhite,
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .lightWhite,
                                                           borderRadius:
                                                               BorderRadius.all(
                                                                   Radius
@@ -475,8 +489,11 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                               TextAlign.center,
                                                           readOnly: true,
                                                           style: TextStyle(
-                                                            fontSize: 10, color: Theme.of(context).colorScheme.fontColor
-                                                          ),
+                                                              fontSize: 10,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .fontColor),
                                                           controller:
                                                               _controllerList[
                                                                   index],
@@ -488,7 +505,10 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                             focusedBorder:
                                                                 OutlineInputBorder(
                                                               borderSide: BorderSide(
-                                                                  color: Theme.of(context).colorScheme.fontColor,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .fontColor,
                                                                   width: 0.5),
                                                               borderRadius:
                                                                   BorderRadius
@@ -498,7 +518,10 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                             enabledBorder:
                                                                 OutlineInputBorder(
                                                               borderSide: BorderSide(
-                                                                  color: Theme.of(context).colorScheme.fontColor,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .fontColor,
                                                                   width: 0.5),
                                                               borderRadius:
                                                                   BorderRadius
@@ -531,11 +554,10 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                                         String>>((String
                                                                     value) {
                                                               return new PopupMenuItem(
-                                                                  child:
-                                                                      new Text(
-                                                                          value, style: TextStyle(
-                                                                          color: Theme.of(
-                                                                              context)
+                                                                  child: new Text(
+                                                                      value,
+                                                                      style: TextStyle(
+                                                                          color: Theme.of(context)
                                                                               .colorScheme
                                                                               .fontColor)),
                                                                   value: value);
@@ -555,11 +577,15 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                                                       child: Icon(
                                                         Icons.add,
                                                         size: 14,
-                                                        color: Theme.of(context).colorScheme.fontColor,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .fontColor,
                                                       ),
                                                       decoration: BoxDecoration(
                                                           color:
-                                                              Theme.of(context).colorScheme.lightWhite,
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .lightWhite,
                                                           borderRadius:
                                                               BorderRadius.all(
                                                                   Radius
@@ -619,7 +645,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
     );
   }
 
-
   Future<void> addToCart(int index, String qty) async {
     _isNetworkAvail = await isNetworkAvailable();
     if (_isNetworkAvail) {
@@ -632,7 +657,6 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
 
           if (int.parse(qty) < productList[index].minOrderQuntity!) {
             qty = productList[index].minOrderQuntity.toString();
-
 
             setSnackbar("${getTranslated(context, 'MIN_MSG')}$qty");
           }
@@ -656,9 +680,8 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
             var data = getdata["data"];
 
             String? qty = data['total_quantity'];
-           // CUR_CART_COUNT = data['cart_count'];
-userProvider.setCartCount(data['cart_count']);
-
+            // CUR_CART_COUNT = data['cart_count'];
+            userProvider.setCartCount(data['cart_count']);
 
             productList[index]
                 .prVarientList![productList[index].selVarient!]
@@ -670,7 +693,6 @@ userProvider.setCartCount(data['cart_count']);
             setState(() {
               _isProgress = false;
             });
-
         } on TimeoutException catch (_) {
           setSnackbar(getTranslated(context, 'somethingMSg')!);
           if (mounted)
@@ -729,8 +751,6 @@ userProvider.setCartCount(data['cart_count']);
             //CUR_CART_COUNT = data['cart_count'];
             userProvider.setCartCount(data['cart_count']);
             model.prVarientList![model.selVarient!].cartCount = qty.toString();
-
-
           } else {
             setSnackbar(msg!);
           }
@@ -890,14 +910,14 @@ userProvider.setCartCount(data['cart_count']);
   }
 
   _tags() {
- 
     if (tagList != null) {
       List<Widget> chips = [];
       for (int i = 0; i < tagList.length; i++) {
         tagChip = ChoiceChip(
           selected: false,
           label: Text(tagList[i],
-              style: TextStyle(color: Theme.of(context).colorScheme.white, fontSize: 11)),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.white, fontSize: 11)),
           backgroundColor: colors.primary,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape: RoundedRectangleBorder(
@@ -909,7 +929,6 @@ userProvider.setCartCount(data['cart_count']);
                   MaterialPageRoute(
                     builder: (context) => ProductList(
                       name: tagList[i],
-
                       fromSeller: false,
                       tag: true,
                     ),
@@ -952,7 +971,7 @@ userProvider.setCartCount(data['cart_count']);
   _showContent() {
     if (_controller.text == "") {
       SettingProvider settingsProvider =
-      Provider.of<SettingProvider>(context, listen: false);
+          Provider.of<SettingProvider>(context, listen: false);
 
       return FutureBuilder<List<String>>(
           future: settingsProvider.getPrefrenceList(HISTORYLIST),
@@ -975,7 +994,6 @@ userProvider.setCartCount(data['cart_count']);
                     _SuggestionList(
                       textController: _controller,
                       suggestions: itemList,
-
                       notificationcontroller: notificationcontroller,
                       getProduct: getProduct,
                       clearAll: clearAll,
@@ -992,228 +1010,222 @@ userProvider.setCartCount(data['cart_count']);
       return notificationisnodata
           ? getNoItem(context)
           : Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.builder(
+                      padding: EdgeInsetsDirectional.only(
+                          bottom: 5, start: 10, end: 10, top: 12),
+                      controller: notificationcontroller,
+                      physics: BouncingScrollPhysics(),
+                      itemCount: productList.length,
+                      itemBuilder: (context, index) {
+                        Product? item;
+                        try {
+                          item =
+                              productList.isEmpty ? null : productList[index];
+                          if (notificationisloadmore &&
+                              index == (productList.length - 1) &&
+                              notificationcontroller!.position.pixels <= 0) {
+                            getProduct();
+                          }
+                        } on Exception catch (_) {}
+
+                        return item == null ? Container() : listItem(index);
+                      }),
+                ),
+                notificationisgettingdata
+                    ? Padding(
+                        padding: EdgeInsetsDirectional.only(top: 5, bottom: 5),
+                        child: CircularProgressIndicator(),
+                      )
+                    : Container(),
+              ],
+            );
+    }
+    return notificationisnodata
+        ? getNoItem(context)
+        : Column(
             children: <Widget>[
               Expanded(
-                child: ListView.builder(
-                    padding: EdgeInsetsDirectional.only(
-                        bottom: 5, start: 10, end: 10, top: 12),
-                    controller: notificationcontroller,
-                    physics: BouncingScrollPhysics(),
-                    itemCount: productList.length,
-                    itemBuilder: (context, index) {
-                      Product? item;
-                      try {
-                        item =
-                            productList.isEmpty ? null : productList[index];
-                        if (notificationisloadmore &&
-                            index == (productList.length - 1) &&
-                            notificationcontroller!.position.pixels <= 0) {
-                          getProduct();
-                        }
-                      } on Exception catch (_) {}
-
-                      return item == null ? Container() : listItem(index);
-                    }),
-              ),
+                  child: _SuggestionList(
+                textController: _controller,
+                suggestions: productList,
+                notificationcontroller: notificationcontroller,
+                getProduct: getProduct,
+                clearAll: clearAll,
+              )),
               notificationisgettingdata
                   ? Padding(
-                      padding:
-                          EdgeInsetsDirectional.only(top: 5, bottom: 5),
+                      padding: EdgeInsetsDirectional.only(top: 5, bottom: 5),
                       child: CircularProgressIndicator(),
                     )
                   : Container(),
             ],
           );
-    }
-    return notificationisnodata
-        ? getNoItem(context)
-        : Column(
-          children: <Widget>[
-            Expanded(
-                child: _SuggestionList(
-              textController: _controller,
-              suggestions: productList,
-              notificationcontroller: notificationcontroller,
-
-              getProduct: getProduct,
-              clearAll: clearAll,
-            )),
-            notificationisgettingdata
-                ? Padding(
-                    padding: EdgeInsetsDirectional.only(top: 5, bottom: 5),
-                    child: CircularProgressIndicator(),
-                  )
-                : Container(),
-          ],
-        );
   }
 
-  Future<void> initSpeechState() async {
-    var hasSpeech = await speech.initialize(
-        onError: errorListener,
-        onStatus: statusListener,
-        debugLogging: false,
-        finalTimeout: Duration(milliseconds: 0));
-    if (hasSpeech) {
-      _localeNames = await speech.locales();
+  // Future<void> initSpeechState() async {
+  //   var hasSpeech = await speech.initialize(
+  //       onError: errorListener,
+  //       onStatus: statusListener,
+  //       debugLogging: false,
+  //       finalTimeout: Duration(milliseconds: 0));
+  //   if (hasSpeech) {
+  //     _localeNames = await speech.locales();
+  //
+  //     var systemLocale = await speech.systemLocale();
+  //     _currentLocaleId = systemLocale?.localeId ?? '';
+  //   }
+  //
+  //   if (!mounted) return;
+  //
+  //   setState(() {
+  //     _hasSpeech = hasSpeech;
+  //   });
+  //   if (hasSpeech) showSpeechDialog();
+  // }
 
-      var systemLocale = await speech.systemLocale();
-      _currentLocaleId = systemLocale?.localeId ?? '';
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      _hasSpeech = hasSpeech;
-    });
-    if (hasSpeech) showSpeechDialog();
-  }
-
-  void errorListener(SpeechRecognitionError error) {
-    setState(() {
-      // lastError = '${error.errorMsg} - ${error.permanent}';
-      setSnackbar(error.errorMsg);
-    });
-  }
+  // void errorListener(SpeechRecognitionError error) {
+  //   setState(() {
+  //     // lastError = '${error.errorMsg} - ${error.permanent}';
+  //     setSnackbar(error.errorMsg);
+  //   });
+  // }
 
   void statusListener(String status) {
-   
     setStater(() {
       lastStatus = '$status';
     });
   }
 
-  void startListening() {
-    lastWords = '';
-    speech.listen(
-        onResult: resultListener,
-        listenFor: Duration(seconds: 30),
-        pauseFor: Duration(seconds: 5),
-        partialResults: true,
-        localeId: _currentLocaleId,
-        onSoundLevelChange: soundLevelListener,
-        cancelOnError: true,
-        listenMode: ListenMode.confirmation);
-    setStater(() {});
-  }
+  // void startListening() {
+  //   lastWords = '';
+  //   speech.listen(
+  //       onResult: resultListener,
+  //       listenFor: Duration(seconds: 30),
+  //       pauseFor: Duration(seconds: 5),
+  //       partialResults: true,
+  //       localeId: _currentLocaleId,
+  //       onSoundLevelChange: soundLevelListener,
+  //       cancelOnError: true,
+  //       listenMode: ListenMode.confirmation);
+  //   setStater(() {});
+  // }
 
   void soundLevelListener(double level) {
     minSoundLevel = min(minSoundLevel, level);
     maxSoundLevel = max(maxSoundLevel, level);
-   
+
     setStater(() {
       this.level = level;
     });
   }
 
-  void stopListening() {
-    speech.stop();
-    setStater(() {
-      level = 0.0;
-    });
-  }
+  // void stopListening() {
+  //   speech.stop();
+  //   setStater(() {
+  //     level = 0.0;
+  //   });
+  // }
 
-  void cancelListening() {
-    speech.cancel();
-    setStater(() {
-      level = 0.0;
-    });
-  }
+  // void cancelListening() {
+  //   speech.cancel();
+  //   setStater(() {
+  //     level = 0.0;
+  //   });
+  // }
 
-  void resultListener(SpeechRecognitionResult result) {
-  
-    setStater(() {
-      lastWords = '${result.recognizedWords}';
-      query = lastWords;
-    });
-
-    if (result.finalResult) {
-      Future.delayed(Duration(seconds: 1)).then((_) async {
-        clearAll();
-
-        _controller.text = lastWords;
-        _controller.selection = TextSelection.fromPosition(
-            TextPosition(offset: _controller.text.length));
-
-        setState(() {});
-        Navigator.of(context).pop();
-      });
-    }
-  }
+  // void resultListener(SpeechRecognitionResult result) {
+  //
+  //   setStater(() {
+  //     lastWords = '${result.recognizedWords}';
+  //     query = lastWords;
+  //   });
+  //
+  //   if (result.finalResult) {
+  //     Future.delayed(Duration(seconds: 1)).then((_) async {
+  //       clearAll();
+  //
+  //       _controller.text = lastWords;
+  //       _controller.selection = TextSelection.fromPosition(
+  //           TextPosition(offset: _controller.text.length));
+  //
+  //       setState(() {});
+  //       Navigator.of(context).pop();
+  //     });
+  //   }
+  // }
 
   showSpeechDialog() {
     return dialogAnimate(context, StatefulBuilder(
-              builder: (BuildContext context, StateSetter setStater1) {
-            setStater = setStater1;
-            return AlertDialog(
-              backgroundColor: Theme.of(context).colorScheme.lightWhite,
-              title: Text(
-                'Search for desired product',
-                style: Theme.of(context).textTheme.subtitle1!.copyWith( color:Theme.of(context).colorScheme.fontColor),
-                textAlign: TextAlign.center,
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: .26,
-                            spreadRadius: level * 1.5,
-                            color: Theme.of(context).colorScheme.black.withOpacity(.05))
-                      ],
-                      color: Theme.of(context).colorScheme.white,
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                    ),
-                    child: IconButton(
-                        icon: Icon(
-                          Icons.mic,
-                          color: colors.primary,
-                        ),
-                        onPressed: () {
-                          if (!_hasSpeech)
-                            initSpeechState();
-                          else
-                            !_hasSpeech || speech.isListening
-                                ? null
-                                : startListening();
-                        }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(lastWords),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    color: Theme.of(context).colorScheme.fontColor.withOpacity(0.1),
-                    child: Center(
-                      child: speech.isListening
-                          ? Text(
-                              "I'm listening...",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle2!
-                                  .copyWith(
-                                      color: Theme.of(context).colorScheme.fontColor,
-                                      fontWeight: FontWeight.bold),
-                            )
-                          : Text(
-                              'Not listening',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle2!
-                                  .copyWith(
-                                      color: Theme.of(context).colorScheme.fontColor,
-                                      fontWeight: FontWeight.bold),
-                            ),
-                    ),
-                  ),
+        builder: (BuildContext context, StateSetter setStater1) {
+      setStater = setStater1;
+      return AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.lightWhite,
+        title: Text(
+          'Search for desired product',
+          style: Theme.of(context)
+              .textTheme
+              .subtitle1!
+              .copyWith(color: Theme.of(context).colorScheme.fontColor),
+          textAlign: TextAlign.center,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: .26,
+                      spreadRadius: level * 1.5,
+                      color:
+                          Theme.of(context).colorScheme.black.withOpacity(.05))
                 ],
+                color: Theme.of(context).colorScheme.white,
+                borderRadius: BorderRadius.all(Radius.circular(50)),
               ),
-            );
-          }));
-        
+              child: IconButton(
+                  icon: Icon(
+                    Icons.mic,
+                    color: colors.primary,
+                  ),
+                  onPressed: () {
+                    // if (!_hasSpeech)
+                    //   initSpeechState();
+                    // else
+                    //   !_hasSpeech || speech.isListening
+                    //       ? null
+                    //       : startListening();
+                  }),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(lastWords),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              color: Theme.of(context).colorScheme.fontColor.withOpacity(0.1),
+              child: Center(
+                child:/* speech.isListening
+                    ? Text(
+                        "I'm listening...",
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: Theme.of(context).colorScheme.fontColor,
+                            fontWeight: FontWeight.bold),
+                      )
+                    :*/ Text(
+                        'Not listening',
+                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: Theme.of(context).colorScheme.fontColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }));
   }
 }
 
@@ -1222,16 +1234,17 @@ class _SuggestionList extends StatelessWidget {
       {this.suggestions,
       this.textController,
       this.searchDelegate,
-
       this.notificationcontroller,
       this.getProduct,
       this.clearAll});
+
   final List<Product>? suggestions;
   final TextEditingController? textController;
 
   final notificationcontroller;
   final SearchDelegate<Product>? searchDelegate;
-  final Function?  getProduct, clearAll;
+  final Function? getProduct, clearAll;
+
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
@@ -1246,7 +1259,8 @@ class _SuggestionList extends StatelessWidget {
             title: Text(
               suggestion.name!,
               style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                  color: Theme.of(context).colorScheme.lightBlack, fontWeight: FontWeight.bold),
+                  color: Theme.of(context).colorScheme.lightBlack,
+                  fontWeight: FontWeight.bold),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -1255,7 +1269,8 @@ class _SuggestionList extends StatelessWidget {
                 ? null
                 : Text(
                     "In " + suggestion.catName!,
-                    style: TextStyle(color: Theme.of(context).colorScheme.fontColor),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.fontColor),
                   ),
             leading: textController!.text.toString().trim().isEmpty ||
                     suggestion.history!
@@ -1284,13 +1299,12 @@ class _SuggestionList extends StatelessWidget {
             ),
             onTap: () async {
               if (suggestion.name!.startsWith('Search Result for ')) {
-
                 SettingProvider settingsProvider =
-                Provider.of<SettingProvider>(context, listen: false);
+                    Provider.of<SettingProvider>(context, listen: false);
 
-                settingsProvider. setPrefrenceList(
+                settingsProvider.setPrefrenceList(
                     HISTORYLIST, textController!.text.toString().trim());
-             
+
                 buildResult = true;
                 clearAll!();
                 getProduct!();
@@ -1303,7 +1317,7 @@ class _SuggestionList extends StatelessWidget {
                     TextPosition(offset: textController!.text.length));
               } else {
                 SettingProvider settingsProvider =
-                Provider.of<SettingProvider>(context, listen: false);
+                    Provider.of<SettingProvider>(context, listen: false);
 
                 settingsProvider.setPrefrenceList(
                     HISTORYLIST, textController!.text.toString().trim());
@@ -1315,7 +1329,6 @@ class _SuggestionList extends StatelessWidget {
                       // transitionDuration: Duration(seconds: 1),
                       pageBuilder: (_, __, ___) => ProductDetail(
                             model: model,
-
                             secPos: 0,
                             index: i,
                             list: true,

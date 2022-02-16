@@ -1001,7 +1001,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
   void _imgFromGallery() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
-      File? image = File(result.files.single.path);
+      File? image = File(result.files.single.path!);
       print("image file is${image}");
       if (mounted) {
         await setProfilePic(image);

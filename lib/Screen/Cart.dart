@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
-
 import 'package:eshop/Helper/Constant.dart';
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Provider/CartProvider.dart';
@@ -10,12 +8,12 @@ import 'package:eshop/Provider/SettingProvider.dart';
 import 'package:eshop/Provider/UserProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
+// import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
-import 'package:paytm/paytm.dart';
+// import 'package:paytm/paytm.dart';
 import 'package:provider/provider.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+// import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../Helper/AppBtn.dart';
 import '../Helper/Color.dart';
@@ -92,11 +90,11 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   List<SectionModel> saveLaterList = [];
   String? msg;
   bool _isLoading = true;
-  Razorpay? _razorpay;
+  // Razorpay? _razorpay;
   TextEditingController promoC = new TextEditingController();
   TextEditingController noteC = new TextEditingController();
   StateSetter? checkoutState;
-  final paystackPlugin = PaystackPlugin();
+  // final paystackPlugin = PaystackPlugin();
   bool deliverable = false;
 
   //List<PaymentItem> _gpaytItems = [];
@@ -165,7 +163,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     buttonController!.dispose();
     for (int i = 0; i < _controller.length; i++) _controller[i].dispose();
 
-    if (_razorpay != null) _razorpay!.clear();
+    // if (_razorpay != null) _razorpay!.clear();
     super.dispose();
   }
 
@@ -2324,10 +2322,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   }
 
   checkout(List<SectionModel> cartList) {
-    _razorpay = Razorpay();
-    _razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // _razorpay = Razorpay();
+    // _razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
@@ -2523,7 +2521,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   doPayment() {
     if (payMethod == getTranslated(context, 'PAYPAL_LBL')) {
       placeOrder('');
-    } else if (payMethod == getTranslated(context, 'RAZORPAY_LBL'))
+    } /*else if (payMethod == getTranslated(context, 'RAZORPAY_LBL'))
       razorpayPayment();
     else if (payMethod == getTranslated(context, 'PAYSTACK_LBL'))
       paystackPayment(context);
@@ -2532,7 +2530,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     else if (payMethod == getTranslated(context, 'STRIPE_LBL'))
       stripePayment();
     else if (payMethod == getTranslated(context, 'PAYTM_LBL'))
-      paytmPayment();
+      paytmPayment();*/
     /*  else if (payMethod ==
                                                         getTranslated(
                                                             context, 'GPAY')) {
@@ -2638,148 +2636,150 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    placeOrder(response.paymentId);
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    var getdata = json.decode(response.message!);
-    String errorMsg = getdata["error"]["description"];
-    setSnackbar(errorMsg, _checkscaffoldKey);
-
-    if (mounted)
-      checkoutState!(() {
-        _placeOrder = true;
-      });
-    context.read<CartProvider>().setProgress(false);
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {}
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   placeOrder(response.paymentId);
+  // }
+  //
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   var getdata = json.decode(response.message!);
+  //   String errorMsg = getdata["error"]["description"];
+  //   setSnackbar(errorMsg, _checkscaffoldKey);
+  //
+  //   if (mounted)
+  //     checkoutState!(() {
+  //       _placeOrder = true;
+  //     });
+  //   context.read<CartProvider>().setProgress(false);
+  // }
+  //
+  // void _handleExternalWallet(ExternalWalletResponse response) {}
 
   updateCheckout() {
     if (mounted) checkoutState!(() {});
   }
 
-  razorpayPayment() async {
-    SettingProvider settingsProvider =
-        Provider.of<SettingProvider>(this.context, listen: false);
+  // razorpayPayment() async {
+  //   SettingProvider settingsProvider =
+  //       Provider.of<SettingProvider>(this.context, listen: false);
+  //
+  //   String? contact = settingsProvider.mobile;
+  //   String? email = settingsProvider.email;
+  //
+  //   String amt = ((totalPrice) * 100).toStringAsFixed(2);
+  //
+  //   if (contact != '' && email != '') {
+  //     context.read<CartProvider>().setProgress(true);
+  //
+  //     checkoutState!(() {});
+  //     var options = {
+  //       KEY: razorpayId,
+  //       AMOUNT: amt,
+  //       NAME: settingsProvider.userName,
+  //       'prefill': {CONTACT: contact, EMAIL: email},
+  //     };
+  //
+  //     try {
+  //       // _razorpay!.open(options);
+  //     } catch (e) {
+  //       debugPrint(e.toString());
+  //     }
+  //   } else {
+  //     if (email == '')
+  //       setSnackbar(getTranslated(context, 'emailWarning')!, _checkscaffoldKey);
+  //     else if (contact == '')
+  //       setSnackbar(getTranslated(context, 'phoneWarning')!, _checkscaffoldKey);
+  //   }
+  // }
 
-    String? contact = settingsProvider.mobile;
-    String? email = settingsProvider.email;
-
-    String amt = ((totalPrice) * 100).toStringAsFixed(2);
-
-    if (contact != '' && email != '') {
-      context.read<CartProvider>().setProgress(true);
-
-      checkoutState!(() {});
-      var options = {
-        KEY: razorpayId,
-        AMOUNT: amt,
-        NAME: settingsProvider.userName,
-        'prefill': {CONTACT: contact, EMAIL: email},
-      };
-
-      try {
-        _razorpay!.open(options);
-      } catch (e) {
-        debugPrint(e.toString());
-      }
-    } else {
-      if (email == '')
-        setSnackbar(getTranslated(context, 'emailWarning')!, _checkscaffoldKey);
-      else if (contact == '')
-        setSnackbar(getTranslated(context, 'phoneWarning')!, _checkscaffoldKey);
-    }
-  }
-
-  void paytmPayment() async {
-    String? paymentResponse;
-    context.read<CartProvider>().setProgress(true);
-
-    String orderId = DateTime.now().millisecondsSinceEpoch.toString();
-
-    String callBackUrl = (payTesting
-            ? 'https://securegw-stage.paytm.in'
-            : 'https://securegw.paytm.in') +
-        '/theia/paytmCallback?ORDER_ID=' +
-        orderId;
-
-    var parameter = {
-      AMOUNT: totalPrice.toString(),
-      USER_ID: CUR_USERID,
-      ORDER_ID: orderId
-    };
-
-    try {
-      final response = await post(
-        getPytmChecsumkApi,
-        body: parameter,
-        headers: headers,
-      );
-
-      var getdata = json.decode(response.body);
-
-      bool error = getdata["error"];
-
-      if (!error) {
-        String txnToken = getdata["txn_token"];
-
-        setState(() {
-          paymentResponse = txnToken;
-        });
-        // orderId, mId, txnToken, txnAmount, callback
-        print("para are $paytmMerId # $orderId # $txnToken # ${totalPrice.toString()} # $callBackUrl  $payTesting");
-        var paytmResponse = Paytm.payWithPaytm(paytmMerId!, orderId, txnToken,
-            totalPrice.toString(), callBackUrl, payTesting);
-        paytmResponse.then((value) {
-              print("valie is $value");
-              value.forEach((key, value) {
-                print("key is $key");
-                print("value is $value");
-              });
-          context.read<CartProvider>().setProgress(false);
-
-          _placeOrder = true;
-          setState(() {});
-          checkoutState!(() {
-            if (value['error']) {
-              paymentResponse = value['errorMessage'];
-
-              if (value['response'] != null)
-                addTransaction(value['response']['TXNID'], orderId,
-                    value['response']['STATUS'] ?? '', paymentResponse, false);
-            } else {
-              if (value['response'] != null) {
-                paymentResponse = value['response']['STATUS'];
-                if (paymentResponse == "TXN_SUCCESS")
-                  placeOrder(value['response']['TXNID']);
-                else
-                  addTransaction(
-                      value['response']['TXNID'],
-                      orderId,
-                      value['response']['STATUS'],
-                      value['errorMessage'] ?? '',
-                      false);
-              }
-            }
-
-            setSnackbar(paymentResponse!, _checkscaffoldKey);
-          });
-        });
-      } else {
-        checkoutState!(() {
-          _placeOrder = true;
-        });
-
-        context.read<CartProvider>().setProgress(false);
-
-        setSnackbar(getdata["message"], _checkscaffoldKey);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  // void paytmPayment() async {
+  //   String? paymentResponse;
+  //   context.read<CartProvider>().setProgress(true);
+  //
+  //   String orderId = DateTime.now().millisecondsSinceEpoch.toString();
+  //
+  //   String callBackUrl = (payTesting
+  //           ? 'https://securegw-stage.paytm.in'
+  //           : 'https://securegw.paytm.in') +
+  //       '/theia/paytmCallback?ORDER_ID=' +
+  //       orderId;
+  //
+  //   var parameter = {
+  //     AMOUNT: totalPrice.toString(),
+  //     USER_ID: CUR_USERID,
+  //     ORDER_ID: orderId
+  //   };
+  //
+  //   try {
+  //     final response = await post(
+  //       getPytmChecsumkApi,
+  //       body: parameter,
+  //       headers: headers,
+  //     );
+  //
+  //     var getdata = json.decode(response.body);
+  //
+  //     bool error = getdata["error"];
+  //
+  //     if (!error) {
+  //       String txnToken = getdata["txn_token"];
+  //
+  //       setState(() {
+  //         paymentResponse = txnToken;
+  //       });
+  //       // orderId, mId, txnToken, txnAmount, callback
+  //       print("para are $paytmMerId # $orderId # $txnToken # ${totalPrice.toString()} # $callBackUrl  $payTesting");
+  //       var paytmResponse = Paytm.payWithPaytm(
+  //           orderId: orderId,txnAmount: totalPrice.toString(),callBackUrl: callBackUrl ,
+  //       txnToken: txnToken,mId: paytmMerId!,staging: payTesting
+  //       );
+  //       paytmResponse.then((value) {
+  //             print("valie is $value");
+  //             value.forEach((key, value) {
+  //               print("key is $key");
+  //               print("value is $value");
+  //             });
+  //         context.read<CartProvider>().setProgress(false);
+  //
+  //         _placeOrder = true;
+  //         setState(() {});
+  //         checkoutState!(() {
+  //           if (value['error']) {
+  //             paymentResponse = value['errorMessage'];
+  //
+  //             if (value['response'] != null)
+  //               addTransaction(value['response']['TXNID'], orderId,
+  //                   value['response']['STATUS'] ?? '', paymentResponse, false);
+  //           } else {
+  //             if (value['response'] != null) {
+  //               paymentResponse = value['response']['STATUS'];
+  //               if (paymentResponse == "TXN_SUCCESS")
+  //                 placeOrder(value['response']['TXNID']);
+  //               else
+  //                 addTransaction(
+  //                     value['response']['TXNID'],
+  //                     orderId,
+  //                     value['response']['STATUS'],
+  //                     value['errorMessage'] ?? '',
+  //                     false);
+  //             }
+  //           }
+  //
+  //           setSnackbar(paymentResponse!, _checkscaffoldKey);
+  //         });
+  //       });
+  //     } else {
+  //       checkoutState!(() {
+  //         _placeOrder = true;
+  //       });
+  //
+  //       context.read<CartProvider>().setProgress(false);
+  //
+  //       setSnackbar(getdata["message"], _checkscaffoldKey);
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   Future<void> placeOrder(String? tranId) async {
     _isNetworkAvail = await isNetworkAvailable();
@@ -2987,37 +2987,37 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  paystackPayment(BuildContext context) async {
-    context.read<CartProvider>().setProgress(true);
-
-    String? email = context.read<SettingProvider>().email;
-
-    Charge charge = Charge()
-      ..amount = totalPrice.toInt()
-      ..reference = _getReference()
-      ..email = email;
-
-    try {
-      CheckoutResponse response = await paystackPlugin.checkout(
-        context,
-        method: CheckoutMethod.card,
-        charge: charge,
-      );
-      if (response.status) {
-        placeOrder(response.reference);
-      } else {
-        setSnackbar(response.message, _checkscaffoldKey);
-        if (mounted)
-          setState(() {
-            _placeOrder = true;
-          });
-        context.read<CartProvider>().setProgress(false);
-      }
-    } catch (e) {
-      context.read<CartProvider>().setProgress(false);
-      rethrow;
-    }
-  }
+  // paystackPayment(BuildContext context) async {
+  //   context.read<CartProvider>().setProgress(true);
+  //
+  //   String? email = context.read<SettingProvider>().email;
+  //
+  //   Charge charge = Charge()
+  //     ..amount = totalPrice.toInt()
+  //     ..reference = _getReference()
+  //     ..email = email;
+  //
+  //   try {
+  //     CheckoutResponse response = await paystackPlugin.checkout(
+  //       context,
+  //       method: CheckoutMethod.card,
+  //       charge: charge,
+  //     );
+  //     if (response.status) {
+  //       placeOrder(response.reference);
+  //     } else {
+  //       setSnackbar(response.message, _checkscaffoldKey);
+  //       if (mounted)
+  //         setState(() {
+  //           _placeOrder = true;
+  //         });
+  //       context.read<CartProvider>().setProgress(false);
+  //     }
+  //   } catch (e) {
+  //     context.read<CartProvider>().setProgress(false);
+  //     rethrow;
+  //   }
+  // }
 
   String _getReference() {
     String platform;
@@ -3030,29 +3030,29 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
   }
 
-  stripePayment() async {
-    context.read<CartProvider>().setProgress(true);
-
-    var response = await StripeService.payWithNewCard(
-        amount: (totalPrice.toInt() * 100).toString(),
-        currency: stripeCurCode,
-        from: "order",
-        context: context);
-
-    if (response.message == "Transaction successful") {
-      placeOrder(response.status);
-    } else if (response.status == 'pending' || response.status == "captured") {
-      placeOrder(response.status);
-    } else {
-      if (mounted)
-        setState(() {
-          _placeOrder = true;
-        });
-
-      context.read<CartProvider>().setProgress(false);
-    }
-    setSnackbar(response.message!, _checkscaffoldKey);
-  }
+  // stripePayment() async {
+  //   context.read<CartProvider>().setProgress(true);
+  //
+  //   var response = await StripeService.payWithNewCard(
+  //       amount: (totalPrice.toInt() * 100).toString(),
+  //       currency: stripeCurCode,
+  //       from: "order",
+  //       context: context);
+  //
+  //   if (response.message == "Transaction successful") {
+  //     placeOrder(response.status);
+  //   } else if (response.status == 'pending' || response.status == "captured") {
+  //     placeOrder(response.status);
+  //   } else {
+  //     if (mounted)
+  //       setState(() {
+  //         _placeOrder = true;
+  //       });
+  //
+  //     context.read<CartProvider>().setProgress(false);
+  //   }
+  //   setSnackbar(response.message!, _checkscaffoldKey);
+  // }
 
   address() {
     return Card(

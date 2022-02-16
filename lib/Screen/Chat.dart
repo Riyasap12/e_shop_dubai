@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+// import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:eshop/Provider/SettingProvider.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:http/http.dart' as http;
@@ -229,9 +229,9 @@ class _ChatState extends State<Chat> {
         Directory target = await getApplicationDocumentsDirectory();
         _filePath = target.path.toString();
       } else {
-        Directory? downloadsDirectory =
-            await (DownloadsPathProvider.downloadsDirectory);
-        _filePath = downloadsDirectory!.path.toString();
+        // Directory? downloadsDirectory =
+        //     await (DownloadsPathProvider.downloadsDirectory);
+        // _filePath = downloadsDirectory!.path.toString();
       }
 
       String fileName = url!.substring(url.lastIndexOf("/") + 1);
@@ -295,9 +295,9 @@ class _ChatState extends State<Chat> {
       Directory target = await getApplicationDocumentsDirectory();
       _filePath = target.path.toString();
     } else {
-      Directory? downloadsDirectory =
-          await (DownloadsPathProvider.downloadsDirectory);
-      _filePath = downloadsDirectory!.path.toString();
+      // Directory? downloadsDirectory =
+      //     await (DownloadsPathProvider.downloadsDirectory);
+      // _filePath = downloadsDirectory!.path.toString();
     }
 
 

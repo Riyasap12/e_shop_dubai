@@ -5,14 +5,15 @@ import 'dart:math';
 
 import 'package:eshop/Provider/SettingProvider.dart';
 import 'package:eshop/Provider/UserProvider.dart';
-import 'package:eshop/Screen/PaypalWebviewActivity.dart';
-import 'package:flutter/cupertino.dart';
+
+// import 'package:eshop/Screen/PaypalWebviewActivity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
+
+// import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:http/http.dart';
-import 'package:paytm/paytm.dart';
 import 'package:provider/provider.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+
+// import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../Helper/AppBtn.dart';
 import '../Helper/Color.dart';
@@ -21,7 +22,6 @@ import '../Helper/PaymentRadio.dart';
 import '../Helper/Session.dart';
 import '../Helper/SimBtn.dart';
 import '../Helper/String.dart';
-import '../Helper/Stripe_Service.dart';
 import '../Model/Transaction_Model.dart';
 
 class MyWallet extends StatefulWidget {
@@ -67,12 +67,14 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
   String? payMethod;
   StateSetter? dialogState;
   bool _isProgress = false;
-  late Razorpay _razorpay;
+
+  // late Razorpay _razorpay;
   List<TransactionModel> tranList = [];
   int offset = 0;
   int total = 0;
   bool isLoadingmore = true, _isLoading = true, payTesting = true;
-  final paystackPlugin = PaystackPlugin();
+
+  // final paystackPlugin = PaystackPlugin();
 
   @override
   void initState() {
@@ -108,10 +110,10 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
     amtC = new TextEditingController();
     msgC = new TextEditingController();
     getTransaction();
-    _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // _razorpay = Razorpay();
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   @override
@@ -239,21 +241,21 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
                 key: _formkey,
                 child: Flexible(
                   child: SingleChildScrollView(
-                      child:  Column(
+                      child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                         Padding(
                             padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
                             child: TextFormField(
-                              style:  Theme.of(this.context)
+                              style: Theme.of(this.context)
                                   .textTheme
                                   .subtitle1!
                                   .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .fontColor,
-                                  fontWeight: FontWeight.normal),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .fontColor,
+                                      fontWeight: FontWeight.normal),
                               keyboardType: TextInputType.number,
                               validator: (val) => validateField(val!,
                                   getTranslated(context, 'FIELD_REQUIRED')),
@@ -261,8 +263,6 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
                                   AutovalidateMode.onUserInteraction,
                               decoration: InputDecoration(
                                 hintText: getTranslated(context, "AMOUNT"),
-
-
                                 hintStyle: Theme.of(this.context)
                                     .textTheme
                                     .subtitle1!
@@ -277,14 +277,14 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
                         Padding(
                             padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
                             child: TextFormField(
-                              style:  Theme.of(this.context)
+                              style: Theme.of(this.context)
                                   .textTheme
                                   .subtitle1!
                                   .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .fontColor,
-                                  fontWeight: FontWeight.normal),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .fontColor,
+                                      fontWeight: FontWeight.normal),
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               decoration: new InputDecoration(
@@ -361,21 +361,23 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
                   } else {
                     if (payMethod!.trim() ==
                         getTranslated(context, 'STRIPE_LBL')!.trim()) {
-                      stripePayment(int.parse(amtC!.text));
+                      // stripePayment(int.parse(amtC!.text));
                     } else if (payMethod!.trim() ==
                         getTranslated(context, 'RAZORPAY_LBL')!.trim())
                       razorpayPayment(double.parse(amtC!.text));
                     else if (payMethod!.trim() ==
-                        getTranslated(context, 'PAYSTACK_LBL')!.trim())
-                      paystackPayment(context, int.parse(amtC!.text));
-                    else if (payMethod == getTranslated(context, 'PAYTM_LBL'))
-                      paytmPayment(double.parse(amtC!.text));
-                    else if (payMethod ==
-                        getTranslated(context, 'PAYPAL_LBL')) {
-                      paypalPayment((amtC!.text).toString());
+                        getTranslated(context, 'PAYSTACK_LBL')!.trim()) {
+                      // paystackPayment(context, int.parse(amtC!.text));
                     } else if (payMethod ==
-                        getTranslated(context, 'FLUTTERWAVE_LBL'))
-                      flutterwavePayment(amtC!.text);
+                        getTranslated(context, 'PAYTM_LBL')) {
+                      // paytmPayment(double.parse(amtC!.text));
+                    } else if (payMethod ==
+                        getTranslated(context, 'PAYPAL_LBL')) {
+                      // paypalPayment((amtC!.text).toString());
+                    } else if (payMethod ==
+                        getTranslated(context, 'FLUTTERWAVE_LBL')) {
+                      // flutterwavePayment(amtC!.text);
+                    }
                     Navigator.pop(context);
                   }
                 }
@@ -395,199 +397,204 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
         .toList();
   }
 
-  Future<void> paypalPayment(String amt) async {
-    String orderId =
-        "wallet-refill-user-$CUR_USERID-${DateTime.now().millisecondsSinceEpoch}-${Random().nextInt(900) + 100}";
+  // Future<void> paypalPayment(String amt) async {
+  //   String orderId =
+  //       "wallet-refill-user-$CUR_USERID-${DateTime.now().millisecondsSinceEpoch}-${Random().nextInt(900) + 100}";
+  //
+  //   try {
+  //     var parameter = {USER_ID: CUR_USERID, ORDER_ID: orderId, AMOUNT: amt};
+  //     Response response =
+  //         await post(paypalTransactionApi, body: parameter, headers: headers)
+  //             .timeout(Duration(seconds: timeOut));
+  //
+  //     var getdata = json.decode(response.body);
+  //
+  //     bool error = getdata["error"];
+  //     String? msg = getdata["message"];
+  //     if (!error) {
+  //       String? data = getdata["data"];
+  //
+  //       Navigator.push(
+  //           context,
+  //           MaterialPageRoute(
+  //               builder: (BuildContext context) => PaypalWebview(
+  //                     url: data,
+  //                     from: "wallet",
+  //                   )));
+  //     } else {
+  //       setSnackbar(msg!);
+  //     }
+  //   } on TimeoutException catch (_) {
+  //     setSnackbar(getTranslated(context, 'somethingMSg')!);
+  //   }
+  // }
 
-    try {
-      var parameter = {USER_ID: CUR_USERID, ORDER_ID: orderId, AMOUNT: amt};
-      Response response =
-          await post(paypalTransactionApi, body: parameter, headers: headers)
-              .timeout(Duration(seconds: timeOut));
+  // Future<void> flutterwavePayment(String price) async {
+  //   _isNetworkAvail = await isNetworkAvailable();
+  //   if (_isNetworkAvail) {
+  //     try {
+  //       if (mounted)
+  //         setState(() {
+  //           _isProgress = true;
+  //         });
+  //
+  //       var parameter = {
+  //         AMOUNT: price,
+  //         USER_ID: CUR_USERID,
+  //       };
+  //       Response response =
+  //           await post(flutterwaveApi, body: parameter, headers: headers)
+  //               .timeout(Duration(seconds: timeOut));
+  //
+  //       if (response.statusCode == 200) {
+  //         var getdata = json.decode(response.body);
+  //
+  //         bool error = getdata["error"];
+  //         String? msg = getdata["message"];
+  //         if (!error) {
+  //           var data = getdata["link"];
+  //           Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                   builder: (BuildContext context) => PaypalWebview(
+  //                         url: data,
+  //                         from: "wallet",
+  //                         amt: amtC!.text.toString(),
+  //                         msg: msgC!.text,
+  //                       )));
+  //         } else {
+  //           setSnackbar(msg!);
+  //         }
+  //         setState(() {
+  //           _isProgress = false;
+  //         });
+  //       }
+  //     } on TimeoutException catch (_) {
+  //       setState(() {
+  //         _isProgress = false;
+  //       });
+  //       setSnackbar(getTranslated(context, 'somethingMSg')!);
+  //     }
+  //   } else {
+  //     if (mounted)
+  //       setState(() {
+  //         _isNetworkAvail = false;
+  //       });
+  //   }
+  // }
 
-      var getdata = json.decode(response.body);
+  // void paytmPayment(double price) async {
+  //   String? payment_response;
+  //   setState(() {
+  //     _isProgress = true;
+  //   });
+  //   String orderId = DateTime.now().millisecondsSinceEpoch.toString();
+  //
+  //   String callBackUrl = (payTesting
+  //           ? 'https://securegw-stage.paytm.in'
+  //           : 'https://securegw.paytm.in') +
+  //       '/theia/paytmCallback?ORDER_ID=' +
+  //       orderId;
+  //
+  //   var parameter = {
+  //     AMOUNT: price.toString(),
+  //     USER_ID: CUR_USERID,
+  //     ORDER_ID: orderId
+  //   };
+  //
+  //   try {
+  //     final response = await post(
+  //       getPytmChecsumkApi,
+  //       body: parameter,
+  //       headers: headers,
+  //     );
+  //     var getdata = json.decode(response.body);
+  //     String? txnToken;
+  //     setState(() {
+  //       txnToken = getdata["txn_token"];
+  //     });
+  //
+  //     var paytmResponse = Paytm.payWithPaytm(
+  //         mId: paytmMerId!,
+  //         orderId: orderId,
+  //         txnToken: txnToken!,
+  //         txnAmount: price.toString(),
+  //         callBackUrl: callBackUrl,
+  //         staging: payTesting);
+  //
+  //     paytmResponse.then((value) {
+  //       setState(() {
+  //         _isProgress = false;
+  //
+  //         if (value['error']) {
+  //           payment_response = value['errorMessage'];
+  //         } else {
+  //           if (value['response'] != null) {
+  //             payment_response = value['response']['STATUS'];
+  //             if (payment_response == "TXN_SUCCESS")
+  //               sendRequest(orderId, "Paytm");
+  //           }
+  //         }
+  //
+  //         setSnackbar(payment_response!);
+  //       });
+  //     });
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
-      bool error = getdata["error"];
-      String? msg = getdata["message"];
-      if (!error) {
-        String? data = getdata["data"];
+  // stripePayment(int price) async {
+  //   if (mounted)
+  //     setState(() {
+  //       _isProgress = true;
+  //     });
+  //
+  //   var response = await StripeService.payWithNewCard(
+  //       amount: (price * 100).toString(),
+  //       currency: stripeCurCode,
+  //       from: "wallet");
+  //
+  //   if (mounted)
+  //     setState(() {
+  //       _isProgress = false;
+  //     });
+  //   setSnackbar(response.message!);
+  // }
 
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => PaypalWebview(
-                      url: data,
-                      from: "wallet",
-                    )));
-      } else {
-        setSnackbar(msg!);
-      }
-    } on TimeoutException catch (_) {
-      setSnackbar(getTranslated(context, 'somethingMSg')!);
-    }
-  }
-
-  Future<void> flutterwavePayment(String price) async {
-    _isNetworkAvail = await isNetworkAvailable();
-    if (_isNetworkAvail) {
-      try {
-        if (mounted)
-          setState(() {
-            _isProgress = true;
-          });
-
-        var parameter = {
-          AMOUNT: price,
-          USER_ID: CUR_USERID,
-        };
-        Response response =
-            await post(flutterwaveApi, body: parameter, headers: headers)
-                .timeout(Duration(seconds: timeOut));
-
-        if (response.statusCode == 200) {
-          var getdata = json.decode(response.body);
-
-          bool error = getdata["error"];
-          String? msg = getdata["message"];
-          if (!error) {
-            var data = getdata["link"];
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => PaypalWebview(
-                          url: data,
-                          from: "wallet",
-                          amt: amtC!.text.toString(),
-                          msg: msgC!.text,
-                        )));
-          } else {
-            setSnackbar(msg!);
-          }
-          setState(() {
-            _isProgress = false;
-          });
-        }
-      } on TimeoutException catch (_) {
-        setState(() {
-          _isProgress = false;
-        });
-        setSnackbar(getTranslated(context, 'somethingMSg')!);
-      }
-    } else {
-      if (mounted)
-        setState(() {
-          _isNetworkAvail = false;
-        });
-    }
-  }
-
-  void paytmPayment(double price) async {
-    String? payment_response;
-    setState(() {
-      _isProgress = true;
-    });
-    String orderId = DateTime.now().millisecondsSinceEpoch.toString();
-
-    String callBackUrl = (payTesting
-            ? 'https://securegw-stage.paytm.in'
-            : 'https://securegw.paytm.in') +
-        '/theia/paytmCallback?ORDER_ID=' +
-        orderId;
-
-    var parameter = {
-      AMOUNT: price.toString(),
-      USER_ID: CUR_USERID,
-      ORDER_ID: orderId
-    };
-
-    try {
-      final response = await post(
-        getPytmChecsumkApi,
-        body: parameter,
-        headers: headers,
-      );
-      var getdata = json.decode(response.body);
-      String? txnToken;
-      setState(() {
-        txnToken = getdata["txn_token"];
-      });
-
-      var paytmResponse = Paytm.payWithPaytm(paytmMerId!, orderId, txnToken!,
-          price.toString(), callBackUrl, payTesting);
-
-      paytmResponse.then((value) {
-        setState(() {
-          _isProgress = false;
-
-          if (value['error']) {
-            payment_response = value['errorMessage'];
-          } else {
-            if (value['response'] != null) {
-              payment_response = value['response']['STATUS'];
-              if (payment_response == "TXN_SUCCESS")
-                sendRequest(orderId, "Paytm");
-            }
-          }
-
-          setSnackbar(payment_response!);
-        });
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  stripePayment(int price) async {
-    if (mounted)
-      setState(() {
-        _isProgress = true;
-      });
-
-    var response = await StripeService.payWithNewCard(
-        amount: (price * 100).toString(),
-        currency: stripeCurCode,
-        from: "wallet");
-
-    if (mounted)
-      setState(() {
-        _isProgress = false;
-      });
-    setSnackbar(response.message!);
-  }
-
-  paystackPayment(BuildContext context, int price) async {
-    if (mounted)
-      setState(() {
-        _isProgress = true;
-      });
-
-    String? email = context.read<UserProvider>().email;
-
-    Charge charge = Charge()
-      ..amount = price
-      ..reference = _getReference()
-      ..email = email;
-
-    try {
-      CheckoutResponse response = await paystackPlugin.checkout(
-        context,
-        method: CheckoutMethod.card,
-        charge: charge,
-      );
-      if (response.status) {
-        sendRequest(response.reference, "Paystack");
-      } else {
-        setSnackbar(response.message);
-        if (mounted)
-          setState(() {
-            _isProgress = false;
-          });
-      }
-    } catch (e) {
-      if (mounted) setState(() => _isProgress = false);
-      rethrow;
-    }
-  }
+  // paystackPayment(BuildContext context, int price) async {
+  //   if (mounted)
+  //     setState(() {
+  //       _isProgress = true;
+  //     });
+  //
+  //   String? email = context.read<UserProvider>().email;
+  //
+  //   Charge charge = Charge()
+  //     ..amount = price
+  //     ..reference = _getReference()
+  //     ..email = email;
+  //
+  //   try {
+  //     CheckoutResponse response = await paystackPlugin.checkout(
+  //       context,
+  //       method: CheckoutMethod.card,
+  //       charge: charge,
+  //     );
+  //     if (response.status) {
+  //       sendRequest(response.reference, "Paystack");
+  //     } else {
+  //       setSnackbar(response.message);
+  //       if (mounted)
+  //         setState(() {
+  //           _isProgress = false;
+  //         });
+  //     }
+  //   } catch (e) {
+  //     if (mounted) setState(() => _isProgress = false);
+  //     rethrow;
+  //   }
+  // }
 
   String _getReference() {
     String platform;
@@ -600,22 +607,22 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
     return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    //placeOrder(response.paymentId);
-    sendRequest(response.paymentId, "RazorPay");
-  }
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   //placeOrder(response.paymentId);
+  //   sendRequest(response.paymentId, "RazorPay");
+  // }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
-    setSnackbar(response.message!);
-    if (mounted)
-      setState(() {
-        _isProgress = false;
-      });
-  }
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   setSnackbar(response.message!);
+  //   if (mounted)
+  //     setState(() {
+  //       _isProgress = false;
+  //     });
+  // }
 
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    print("EXTERNAL_WALLET: " + response.walletName!);
-  }
+  // void _handleExternalWallet(ExternalWalletResponse response) {
+  //   print("EXTERNAL_WALLET: " + response.walletName!);
+  // }
 
   razorpayPayment(double price) async {
     SettingProvider settingsProvider =
@@ -640,7 +647,7 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
       };
 
       try {
-        _razorpay.open(options);
+        // _razorpay.open(options);
       } catch (e) {
         debugPrint(e.toString());
       }
@@ -891,7 +898,7 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
   @override
   void dispose() {
     buttonController!.dispose();
-    _razorpay.clear();
+    // _razorpay.clear();
     super.dispose();
   }
 
@@ -952,15 +959,15 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
             if (paystack!) {
               paystackId = payment["paystack_key_id"];
 
-              paystackPlugin.initialize(publicKey: paystackId!);
+              // paystackPlugin.initialize(publicKey: paystackId!);
             }
             if (stripe!) {
               stripeId = payment['stripe_publishable_key'];
               stripeSecret = payment['stripe_secret_key'];
               stripeCurCode = payment['stripe_currency_code'];
               stripeMode = payment['stripe_mode'] ?? 'test';
-              StripeService.secret = stripeSecret;
-              StripeService.init(stripeId, stripeMode);
+              // StripeService.secret = stripeSecret;
+              // StripeService.init(stripeId, stripeMode);
             }
             if (paytm!) {
               paytmMerId = payment['paytm_merchant_id'];

@@ -2,15 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+// import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:eshop/Helper/Session.dart';
 import 'package:eshop/Model/Order_Model.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
@@ -1216,9 +1213,9 @@ class StateOrder extends State<OrderDetail>
                 var target = await getApplicationDocumentsDirectory();
                 targetPath = target.path.toString();
               } else {
-                var downloadsDirectory =
-                    await DownloadsPathProvider.downloadsDirectory;
-                targetPath = downloadsDirectory!.path.toString();
+                // var downloadsDirectory =
+                //     await DownloadsPathProvider.downloadsDirectory;
+                // targetPath = downloadsDirectory!.path.toString();
               }
 
               var targetFileName = "Invoice_${widget.model!.id}";

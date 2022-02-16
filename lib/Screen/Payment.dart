@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:eshop/Provider/UserProvider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
+// import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +74,7 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
   Animation? buttonSqueezeanimation;
   AnimationController? buttonController;
   bool _isNetworkAvail = true;
-  final plugin = PaystackPlugin();
+  // final plugin = PaystackPlugin();
 
   @override
   void initState() {
@@ -575,26 +575,26 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
             bankTransfer =
                 payment["direct_bank_transfer"] == "1" ? true : false;
 
-            if (razorpay) razorpayId = payment["razorpay_key_id"];
-            if (paystack) {
-              paystackId = payment["paystack_key_id"];
+            // if (razorpay) razorpayId = payment["razorpay_key_id"];
+            // if (paystack) {
+              // paystackId = payment["paystack_key_id"];
 
-              plugin.initialize(publicKey: paystackId!);
-            }
-            if (stripe) {
-              stripeId = payment['stripe_publishable_key'];
-              stripeSecret = payment['stripe_secret_key'];
-              stripeCurCode = payment['stripe_currency_code'];
-              stripeMode = payment['stripe_mode'] ?? 'test';
-              StripeService.secret = stripeSecret;
-              StripeService.init(stripeId, stripeMode);
-            }
-            if (paytm) {
-              paytmMerId = payment['paytm_merchant_id'];
-              paytmMerKey = payment['paytm_merchant_key'];
-              payTesting =
-                  payment['paytm_payment_mode'] == 'sandbox' ? true : false;
-            }
+              // plugin.initialize(publicKey: paystackId!);
+            // }
+            // if (stripe) {
+            //   stripeId = payment['stripe_publishable_key'];
+            //   stripeSecret = payment['stripe_secret_key'];
+            //   stripeCurCode = payment['stripe_currency_code'];
+            //   stripeMode = payment['stripe_mode'] ?? 'test';
+              // StripeService.secret = stripeSecret;
+              // StripeService.init(stripeId, stripeMode);
+            // }
+            // if (paytm) {
+            //   paytmMerId = payment['paytm_merchant_id'];
+            //   paytmMerKey = payment['paytm_merchant_key'];
+            //   payTesting =
+            //       payment['paytm_payment_mode'] == 'sandbox' ? true : false;
+            // }
 
             if (bankTransfer) {
               bankName = payment['bank_name'];

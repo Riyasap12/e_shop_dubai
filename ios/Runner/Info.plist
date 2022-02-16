@@ -27,13 +27,22 @@
 			<string>Bundle id</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>supermarket.tamyeez.bidiya</string>
+				<string>tamyeezbidiya.page.link</string>
 			</array>
 		</dict>
-
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.994365230472-1svvhckesud8jpctsl8bh6cr1kqsp3ai</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+    <key>FirebaseAppDelegateProxyEnabled</key>
+    <false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>https</string>
