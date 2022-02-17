@@ -48,8 +48,6 @@ void main() async {
     ChangeNotifierProvider<ThemeNotifier>(
       create: (BuildContext context) {
         /*String? theme = prefs.getString(APP_THEME);
-
-
         if (theme == DARK)
           ISDARK = "true";
         else if (theme == LIGHT) ISDARK = "false";

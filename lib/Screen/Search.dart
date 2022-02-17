@@ -231,8 +231,9 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
           ),
           titleSpacing: 0,
           actions: [
-            _controller.text != ""
-                ? IconButton(
+            // _controller.text != ""
+            //     ?
+            IconButton(
                     onPressed: () {
                       _controller.text = '';
                     },
@@ -241,19 +242,19 @@ class _SearchState extends State<Search> with TickerProviderStateMixin {
                       color: colors.primary,
                     ),
                   )
-                : IconButton(
-                    icon: Icon(
-                      Icons.mic,
-                      color: colors.primary,
-                    ),
-                    onPressed: () {
-                      lastWords = '';
-                      // if (!_hasSpeech)
-                      //   initSpeechState();
-                      // else
-                      //   showSpeechDialog();
-                    },
-                  )
+                // : IconButton(
+                //     icon: Icon(
+                //       Icons.mic,
+                //       color: colors.primary,
+                //     ),
+                //     onPressed: () {
+                //       lastWords = '';
+                //       // if (!_hasSpeech)
+                //       //   initSpeechState();
+                //       // else
+                //       //   showSpeechDialog();
+                //     },
+                //   )
           ],
         ),
         body: _isNetworkAvail

@@ -273,7 +273,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
     }).onError((error) {});
   }
 
-  Future<void> _createDynamicLink(bool short, String refId) async {
+  Future<void> _createDynamicLink(bool short) async {
     SettingProvider settingsProvider =
     Provider.of<SettingProvider>(context, listen: false);
     print("~~~${settingsProvider.referalCode}");
@@ -285,10 +285,10 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
         packageName: 'supermarket.tamyeez.bidiya',
         minimumVersion: 21,
       ),
-      // iosParameters:  IOSParameters(
-      //     bundleId: "com.redteam.xperience",
-      //     appStoreId: "1603811856",
-      //     minimumVersion: "10.0"),
+      iosParameters:  IOSParameters(
+          bundleId: "supermarket.tamyeez.bidiya",
+          appStoreId: "1602651171",
+          minimumVersion: "10.0"),
     );
 
     Uri url;
@@ -628,9 +628,9 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
             _openStoreListing();
           } else if (title == getTranslated(context, 'SHARE_APP')) {
              await _createDynamicLink(
-                true, "12345");
+                true);
              var str =
-                 "$appName\n\n${getTranslated(context, 'APPFIND')}\n\n$_linkMessage";
+                 "$appName\n\nRefer Code:$REFER_CODE\n\nYou can find our app from below url\n\n$_linkMessage";
 
              await Share.share(str);
           } else if (title == getTranslated(context, 'ABOUT_LBL')) {

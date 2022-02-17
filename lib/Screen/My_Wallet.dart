@@ -216,6 +216,7 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
     return null;
   }
 
+
   _showDialog() async {
     bool payWarn = false;
     await dialogAnimate(context,
@@ -1050,13 +1051,14 @@ class StateWallet extends State<MyWallet> with TickerProviderStateMixin {
                                         Theme.of(context).colorScheme.fontColor,
                                     fontWeight: FontWeight.bold));
                       }),
-                      SimBtn(
-                        size: 0.8,
-                        title: getTranslated(context, "ADD_MONEY"),
-                        onBtnSelected: () {
-                          _showDialog();
-                        },
-                      ),
+                      ///Add Money Button
+                      // SimBtn(
+                      //   size: 0.8,
+                      //   title: getTranslated(context, "ADD_MONEY"),
+                      //   onBtnSelected: () {
+                      //     _showDialog();
+                      //   },
+                      // ),
                     ],
                   ),
                 ),

@@ -1,8 +1,11 @@
 import 'package:eshop/Helper/Session.dart';
+import 'package:eshop/Provider/SettingProvider.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 import '../Helper/Color.dart';
@@ -18,6 +21,49 @@ class ReferEarn extends StatefulWidget {
 class _ReferEarnState extends State<ReferEarn> {
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+
+
+  String _linkMessage = '';
+
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+  Future<void> initDynamicLinks() async {
+    dynamicLinks.onLink.listen((dynamicLinkData) {
+      Navigator.pushNamed(context, dynamicLinkData.link.path);
+    }).onError((error) {});
+  }
+
+  Future<void> _createDynamicLink(bool short) async {
+    SettingProvider settingsProvider =
+    Provider.of<SettingProvider>(context, listen: false);
+    print("~~~${settingsProvider.referalCode}");
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://tamyeezbidiya.page.link',
+      link: Uri.parse(
+          'http://supermarket.tamyeez.bidiya.com/?refId=${settingsProvider.referalCode}'),
+      androidParameters: AndroidParameters(
+        packageName: 'supermarket.tamyeez.bidiya',
+        minimumVersion: 21,
+      ),
+      iosParameters:  IOSParameters(
+          bundleId: "supermarket.tamyeez.bidiya",
+          appStoreId: "1602651171",
+          minimumVersion: "10.0"),
+    );
+
+    Uri url;
+    if (short) {
+      final ShortDynamicLink shortLink =
+      await dynamicLinks.buildShortLink(parameters);
+      url = shortLink.shortUrl;
+    } else {
+      url = await dynamicLinks.buildLink(parameters);
+    }
+
+    setState(() {
+      _linkMessage = url.toString();
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,11 +149,11 @@ class _ReferEarnState extends State<ReferEarn> {
                 SimBtn(
                   size: 0.8,
                   title: getTranslated(context, "SHARE_APP"),
-                  onBtnSelected: () {
-
+                  onBtnSelected: () async{
+                    await _createDynamicLink(true);
                     var str =
-                        "$appName\nRefer Code:$REFER_CODE\n${getTranslated(context, 'APPFIND')}$androidLink$packageName\n\n${getTranslated(context, 'IOSLBL')}\n$iosLink$iosPackage";
-                   Share.share(str);
+                        "$appName\n\nRefer Code:$REFER_CODE\n\nYou can find our app from below url\n$_linkMessage";
+                   await Share.share(str);
 
                   },
                 ),
@@ -118,6 +164,7 @@ class _ReferEarnState extends State<ReferEarn> {
       ),
     );
   }
+
 
   setSnackbar(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
