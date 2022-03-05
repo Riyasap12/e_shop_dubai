@@ -13,11 +13,8 @@ import 'package:eshop/Screen/ProductList.dart';
 import 'package:eshop/Screen/ReviewList.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -130,8 +127,10 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
           revImgList.add(m);
         }
       }
+WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+  getShare();
+});
 
-    getShare();
 
     _oldSelVarient = widget.model!.selVarient;
 
@@ -191,21 +190,20 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
   }
 
   Future<void> createDynamicLink() async {
-    var documentDirectory;
-
-    if (Platform.isIOS)
-      documentDirectory = (await getApplicationDocumentsDirectory()).path;
-    else
-      documentDirectory = (await getExternalStorageDirectory())!.path;
-
-    final response1 = await get(Uri.parse(widget.model!.image!));
-    final bytes1 = response1.bodyBytes;
-
-    final File imageFile = File('$documentDirectory/${widget.model!.name}.png');
-    imageFile.writeAsBytesSync(bytes1);
-    Share.shareFiles(['$documentDirectory/${widget.model!.name}.png'],
-        text:
-            "${widget.model!.name}\n${shortenedLink.shortUrl.toString()}\n$shareLink");
+    // var documentDirectory;
+    //
+    // if (Platform.isIOS)
+    //   documentDirectory = (await getApplicationDocumentsDirectory()).path;
+    // else
+    //   documentDirectory = (await getExternalStorageDirectory())!.path;
+    //
+    // final response1 = await get(Uri.parse(widget.model!.image!));
+    // final bytes1 = response1.bodyBytes;
+    //
+    // final File imageFile = File('$documentDirectory/${widget.model!.name}.png');
+    // imageFile.writeAsBytesSync(bytes1);
+    Share.share(
+            "${widget.model!.name}\nGet exciting offer only on Tamyeez Bidiya\n\n$shareLink");
   }
 
   Future<Null> _playAnimation() async {
@@ -2622,24 +2620,24 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
   Future<void> getShare() async {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
-      uriPrefix: 'https://redteam.page.link',
+      uriPrefix: 'https://tamyeezbidiya.page.link',
       link: Uri.parse(
-          'http://supermarket.tamyeez.bidiya.com/?refId='),
+          'http://supermarket.tamyeez.bidiya.com/?productId='),
       androidParameters: AndroidParameters(
         packageName: 'supermarket.tamyeez.bidiya',
         minimumVersion: 21,
       ),
-      // iosParameters:  IOSParameters(
-      //     bundleId: "com.redteam.xperience",
-      //     appStoreId: "1603811856",
-      //     minimumVersion: "10.0"),
+      iosParameters:  IOSParameters(
+          bundleId: "supermarket.tamyeez.bidiya",
+          appStoreId: "1603811856",
+          minimumVersion: "10.0"),
     );
 
     Uri url;
     if (true) {
-      final ShortDynamicLink shortLink =
+      shortenedLink =
       await dynamicLinks.buildShortLink(parameters);
-      url = shortLink.shortUrl;
+      url = shortenedLink.shortUrl;
     } else {
       url = await dynamicLinks.buildLink(parameters);
     }
@@ -2661,7 +2659,7 @@ class StateItem extends State<ProductDetail> with TickerProviderStateMixin {
     //     appStoreId: appStoreId,
     //   ),
     // );
-    //
+
     // final Uri longDynamicUrl = await parameters.buildUrl();
     //
     // shortenedLink = await DynamicLinkParameters.shortenUrl(

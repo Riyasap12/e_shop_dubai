@@ -5,7 +5,7 @@ final String androidLink = 'https://play.google.com/store/apps/details?id=';
 
 final String iosPackage = 'supermarket.tamyeez.bidiya';
 final String iosLink = 'your ios link here';
-final String appStoreId = '123456789';
+final String appStoreId = '1602651171';
 
 final String deepLinkUrlPrefix = 'https://tamyeezbidiya.page.link';
 final String deepLinkName = 'eshop';

@@ -2519,9 +2519,10 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   }
 
   doPayment() {
-    if (payMethod == getTranslated(context, 'PAYPAL_LBL')) {
-      placeOrder('');
-    } /*else if (payMethod == getTranslated(context, 'RAZORPAY_LBL'))
+    // if (payMethod == getTranslated(context, 'PAYPAL_LBL')) {
+    //   placeOrder('');
+    // }
+    /*else if (payMethod == getTranslated(context, 'RAZORPAY_LBL'))
       razorpayPayment();
     else if (payMethod == getTranslated(context, 'PAYSTACK_LBL'))
       paystackPayment(context);
@@ -2813,8 +2814,12 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       //   payVia = "Paystack";
       // else if (payMethod == getTranslated(context, 'FLUTTERWAVE_LBL'))
       //   payVia = "Flutterwave";
-      // else if (payMethod == getTranslated(context, 'STRIPE_LBL'))
-      //   payVia = "Stripe";
+      // else
+      if (payMethod == getTranslated(context, 'STRIPE_LBL'))
+        payVia = "Stripe";
+      else{
+        payVia = "COD";
+      }
       // else if (payMethod == getTranslated(context, 'PAYTM_LBL'))
       //   payVia = "Paytm";
       // else if (payMethod == "Wallet")
