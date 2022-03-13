@@ -83,11 +83,7 @@ getLink(){
         if (isFirstTime) {
             Navigator.pushReplacementNamed(context, "/home");
         } else {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => IntroSlider(),
-                ));
+            Navigator.pushReplacementNamed(context, "/languageSelector");
         }
     }
 

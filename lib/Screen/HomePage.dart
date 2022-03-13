@@ -1379,7 +1379,7 @@ class _HomePageState extends State<HomePage>
   }
 
   _deliverPincode() {
-    // String curpin = context.read<UserProvider>().curPincode;
+    // String curpin = context.read<UserProvider>().curUserName;
     return GestureDetector(
       child: Container(
         // padding: EdgeInsets.symmetric(vertical: 8),
@@ -1399,7 +1399,7 @@ class _HomePageState extends State<HomePage>
                 style: TextStyle(color: Theme.of(context).colorScheme.fontColor),
               );
             },
-            selector: (_, provider) => provider.curPincode,
+            selector: (_, provider) => provider.curUserName,
           ),
           trailing: Icon(Icons.keyboard_arrow_right),
         ),

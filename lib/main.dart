@@ -10,6 +10,7 @@ import 'package:eshop/Provider/ProductDetailProvider.dart';
 import 'package:eshop/Provider/UserProvider.dart';
 
 import 'package:eshop/Screen/Splash.dart';
+import 'package:eshop/Screen/change_language_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -206,6 +207,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
             routes: {
               '/': (context) => Splash(initialLink: widget.initialLink),
               '/home': (context) => Dashboard(),
+              '/languageSelector': (context) => ChangeLanguage(),
             },
 
             darkTheme: ThemeData(

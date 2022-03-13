@@ -11,6 +11,7 @@ import 'package:eshop/Screen/Cart.dart';
 import 'package:eshop/Screen/CompareList.dart';
 import 'package:eshop/Screen/ProductList.dart';
 import 'package:eshop/Screen/ReviewList.dart';
+import 'package:eshop/Screen/change_language_screen.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -1943,6 +1944,7 @@ WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
                           String qty = ((int.parse(qtyController.text)) +
                                   (int.parse(widget.model!.qtyStepSize!)))
                               .toString();
+
                           addToCart(qty, true);
                         },
                         icon: Icon(
@@ -2470,7 +2472,7 @@ WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
 
 
   _deliverPincode() {
-    String pin = context.read<UserProvider>().curPincode;
+    String pin = context.read<UserProvider>().curUserName;
     return Card(
       elevation: 0,
       child: GestureDetector(
