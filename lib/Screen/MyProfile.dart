@@ -582,7 +582,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ManageAddress(
-                        home: true,
+                        home: true,isMyProfileClick: true,
                       ),
                     ));
           } else if (title == getTranslated(context, 'REFEREARN')) {

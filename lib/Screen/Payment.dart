@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:eshop/Model/Section_Model.dart';
+import 'package:eshop/Provider/CartProvider.dart';
+import 'package:eshop/Provider/SettingProvider.dart';
 import 'package:eshop/Provider/UserProvider.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_paystack/flutter_paystack.dart';
@@ -19,6 +22,7 @@ import '../Helper/String.dart';
 import '../Helper/Stripe_Service.dart';
 import '../Model/Model.dart';
 import 'Cart.dart';
+import 'Order_Success.dart';
 
 class Payment extends StatefulWidget {
   final Function update;
@@ -40,6 +44,15 @@ String? bankName, bankNo, acName, acNo, exDetails;
 class StatePayment extends State<Payment> with TickerProviderStateMixin {
   bool _isLoading = true;
   String? startingDate;
+
+  // StateSetter? checkoutState;
+  bool deliverable = false;
+  bool  _placeOrder = true;
+  bool  isLoading = false;
+
+  List<Model> deliverableList = [];
+
+  TextEditingController noteC = new TextEditingController();
 
   late bool cod,
       paypal,
@@ -81,6 +94,7 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
     super.initState();
     _getdateTime();
     timeSlotList.length = 0;
+    selectedMethod = 0;
 
     new Future.delayed(Duration.zero, () {
       paymentMethodList = [
@@ -97,6 +111,7 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
         //     : getTranslated(context, 'GPAY'),
         // getTranslated(context, 'BANKTRAN'),
       ];
+      payMethod = paymentMethodList.first;
     });
     if (widget.msg != '')
       WidgetsBinding.instance!
@@ -164,228 +179,759 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
       appBar: getAppBar(getTranslated(context, 'PAYMENT_METHOD_LBL')!, context),
       body: _isNetworkAvail
           ? _isLoading
-              ? getProgress()
-              : Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
+          ? getProgress()
+          : Stack(
+            children: [
+              Padding(
+        padding:
+        const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+        child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Consumer<UserProvider>(
+                            builder: (context, userProvider, _) {
+                              return Card(
+                                elevation: 0,
+                                child: userProvider.curBalance != "0" &&
+                                    userProvider.curBalance.isNotEmpty &&
+                                    userProvider.curBalance != ""
+                                    ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: CheckboxListTile(
+                                    dense: true,
+                                    contentPadding: EdgeInsets.all(0),
+                                    value: isUseWallet,
+                                    onChanged: (bool? value) {
+                                      if (mounted)
+                                        setState(() {
+                                          isUseWallet = value;
+                                          if (value!) {
+                                            if (totalPrice <=
+                                                double.parse(
+                                                    userProvider
+                                                        .curBalance)) {
+                                              remWalBal = (double.parse(
+                                                  userProvider
+                                                      .curBalance) -
+                                                  totalPrice);
+                                              usedBal = totalPrice;
+                                              payMethod = "Wallet";
+
+                                              isPayLayShow = false;
+                                            } else {
+                                              remWalBal = 0;
+                                              usedBal = double.parse(
+                                                  userProvider
+                                                      .curBalance);
+                                              isPayLayShow = true;
+                                            }
+
+                                            totalPrice =
+                                                totalPrice - usedBal;
+                                          } else {
+                                            totalPrice =
+                                                totalPrice + usedBal;
+                                            remWalBal = double.parse(
+                                                userProvider
+                                                    .curBalance);
+                                            payMethod = null;
+                                            selectedMethod = null;
+                                            usedBal = 0;
+                                            isPayLayShow = true;
+                                          }
+
+                                          widget.update();
+                                        });
+                                    },
+                                    title: Text(
+                                      getTranslated(
+                                          context, 'USE_WALLET')!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!.copyWith(color:  Theme.of(context).colorScheme.fontColor),
+                                    ),
+                                    subtitle: Padding(
+                                      padding:
+                                      const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Text(
+                                        isUseWallet!
+                                            ? getTranslated(context,
+                                            'REMAIN_BAL')! +
+                                            " : " +
+                                            CUR_CURRENCY! +
+                                            " " +
+                                            remWalBal
+                                                .toStringAsFixed(2)
+                                            : getTranslated(context,
+                                            'TOTAL_BAL')! +
+                                            " : " +
+                                            CUR_CURRENCY! +
+                                            " " +
+                                            double.parse(
+                                                userProvider
+                                                    .curBalance)
+                                                .toStringAsFixed(2),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Theme.of(context).colorScheme.black),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                    : Container(),
+                              );
+                            }),
+                        isTimeSlot!
+                            ? Card(
+                          elevation: 0,
+                          child: Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  getTranslated(
+                                      context, 'PREFERED_TIME')!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!.copyWith(color:  Theme.of(context).colorScheme.fontColor),
+                                ),
+                              ),
+                              Divider(),
+                              Container(
+                                height: 90,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10),
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection:
+                                    Axis.horizontal,
+                                    itemCount: int.parse(allowDay!),
+                                    itemBuilder: (context, index) {
+                                      return dateCell(index);
+                                    }),
+                              ),
+                              Divider(),
+                              ListView.builder(
+                                  shrinkWrap: true,
+                                  physics:
+                                  NeverScrollableScrollPhysics(),
+                                  itemCount: timeModel.length,
+                                  itemBuilder: (context, index) {
+                                    return timeSlotItem(index);
+                                  })
+                            ],
+                          ),
+                        )
+                            : Container(),
+                        isPayLayShow!
+                            ? Card(
+                          elevation: 0,
+                          child: Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  getTranslated(
+                                      context, 'SELECT_PAYMENT')!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!.copyWith(color:  Theme.of(context).colorScheme.fontColor),
+                                ),
+                              ),
+                              Divider(),
+                              ListView.builder(
+                                  shrinkWrap: true,
+                                  physics:
+                                  NeverScrollableScrollPhysics(),
+                                  itemCount:
+                                  paymentMethodList.length,
+                                  itemBuilder: (context, index) {
+                                    if (index == 0 && cod)
+                                      return paymentItem(index);
+                                    // else if (index == 1 && paypal)
+                                    //   return paymentItem(index);
+                                    // else if (index == 2 && paumoney)
+                                    //   return paymentItem(index);
+                                    // else if (index == 3 && razorpay)
+                                    //   return paymentItem(index);
+                                    // else if (index == 4 && paystack)
+                                    //   return paymentItem(index);
+                                    // else if (index == 5 &&
+                                    //     flutterwave)
+                                    //   return paymentItem(index);
+                                    // else if (index == 6 && stripe)
+                                    //   return paymentItem(index);
+                                    // else if (index == 7 && paytm)
+                                    //   return paymentItem(index);
+                                    // else if (index == 8 && gpay)
+                                    //   return paymentItem(index);
+                                    // else if (index == 9 &&
+                                    //     bankTransfer)
+                                    //   return paymentItem(index);
+                                    else
+                                      return Container();
+                                  }),
+                            ],
+                          ),
+                        )
+                            : Container()
+                      ],
+                    ),
+                  ),
+                ),
+                SimBtn(
+                  size: 0.8,
+                  title: getTranslated(context, 'PLACE_ORDER'),
+                  onBtnSelected: () {
+                    if (double.parse(
+                        MIN_ALLOW_CART_AMT!) >
+                        oriPrice) {
+                      setSnackbar(
+                        getTranslated(context,
+                            'MIN_CART_AMT')!,);
+                    } else if (!deliverable) {
+                      checkDeliverable();
+                    } else
+                      confirmDialog();
+                  },
+                ),
+              ],
+        ),
+      ),
+              showCircularProgress(context.read<CartProvider>().isProgress, colors.primary)
+            ],
+          )
+          : noInternet(context),
+    );
+  }
+
+  Widget showCircularProgress(bool _isProgress, Color color) {
+    if (_isProgress) {
+      return Center(
+          child: CircularProgressIndicator(
+            valueColor: new AlwaysStoppedAnimation<Color>(color),
+          ));
+    }
+    return Container(
+      height: 0.0,
+      width: 0.0,
+    );
+  }
+
+  Future<void> checkDeliverable() async {
+    _isNetworkAvail = await isNetworkAvailable();
+    if (_isNetworkAvail) {
+      try {
+        context.read<CartProvider>().setProgress(true);
+
+        var parameter = {
+          USER_ID: CUR_USERID,
+          ADD_ID: selAddress,
+        };
+
+        Response response =
+        await post(checkCartDelApi, body: parameter, headers: headers)
+            .timeout(Duration(seconds: timeOut));
+
+        var getdata = json.decode(response.body);
+
+        bool error = getdata["error"];
+        String? msg = getdata["message"];
+        var data = getdata["data"];
+        context.read<CartProvider>().setProgress(false);
+
+        if (error) {
+          deliverableList = (data as List)
+              .map((data) => new Model.checkDeliverable(data))
+              .toList();
+
+          // checkoutState!(() {
+          deliverable = false;
+          _placeOrder = true;
+          // });
+
+          setSnackbar(msg!);
+        } else {
+          deliverableList = (data as List)
+              .map((data) => new Model.checkDeliverable(data))
+              .toList();
+
+          // checkoutState!(() {
+          deliverable = true;
+          // });
+          confirmDialog();
+        }
+      } on TimeoutException catch (_) {
+        setSnackbar(getTranslated(context, 'somethingMSg')!);
+      }
+    } else {
+      if (mounted)
+        setState(() {
+          _isNetworkAvail = false;
+        });
+    }
+  }
+
+  void confirmDialog() {
+    showGeneralDialog(
+        barrierColor: Theme.of(context).colorScheme.black.withOpacity(0.5),
+        transitionBuilder: (context, a1, a2, widget) {
+          return Transform.scale(
+            scale: a1.value,
+            child: Opacity(
+                opacity: a1.value,
+                child: AlertDialog(
+                  contentPadding: const EdgeInsets.all(0),
+                  elevation: 2.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(20.0, 20.0, 0, 2.0),
+                            child: Text(
+                              getTranslated(context, 'CONFIRM_ORDER')!,
+                              style: Theme.of(this.context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .fontColor),
+                            )),
+                        Divider(
+                            color: Theme.of(context).colorScheme.lightBlack),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Consumer<UserProvider>(
-                                  builder: (context, userProvider, _) {
-                                return Card(
-                                  elevation: 0,
-                                  child: userProvider.curBalance != "0" &&
-                                          userProvider.curBalance.isNotEmpty &&
-                                          userProvider.curBalance != ""
-                                      ? Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: CheckboxListTile(
-                                            dense: true,
-                                            contentPadding: EdgeInsets.all(0),
-                                            value: isUseWallet,
-                                            onChanged: (bool? value) {
-                                              if (mounted)
-                                                setState(() {
-                                                  isUseWallet = value;
-                                                  if (value!) {
-                                                    if (totalPrice <=
-                                                        double.parse(
-                                                            userProvider
-                                                                .curBalance)) {
-                                                      remWalBal = (double.parse(
-                                                              userProvider
-                                                                  .curBalance) -
-                                                          totalPrice);
-                                                      usedBal = totalPrice;
-                                                      payMethod = "Wallet";
-
-                                                      isPayLayShow = false;
-                                                    } else {
-                                                      remWalBal = 0;
-                                                      usedBal = double.parse(
-                                                          userProvider
-                                                              .curBalance);
-                                                      isPayLayShow = true;
-                                                    }
-
-                                                    totalPrice =
-                                                        totalPrice - usedBal;
-                                                  } else {
-                                                    totalPrice =
-                                                        totalPrice + usedBal;
-                                                    remWalBal = double.parse(
-                                                        userProvider
-                                                            .curBalance);
-                                                    payMethod = null;
-                                                    selectedMethod = null;
-                                                    usedBal = 0;
-                                                    isPayLayShow = true;
-                                                  }
-
-                                                  widget.update();
-                                                });
-                                            },
-                                            title: Text(
-                                              getTranslated(
-                                                  context, 'USE_WALLET')!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1!.copyWith(color:  Theme.of(context).colorScheme.fontColor),
-                                            ),
-                                            subtitle: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 8.0),
-                                              child: Text(
-                                                isUseWallet!
-                                                    ? getTranslated(context,
-                                                            'REMAIN_BAL')! +
-                                                        " : " +
-                                                        CUR_CURRENCY! +
-                                                        " " +
-                                                        remWalBal
-                                                            .toStringAsFixed(2)
-                                                    : getTranslated(context,
-                                                            'TOTAL_BAL')! +
-                                                        " : " +
-                                                        CUR_CURRENCY! +
-                                                        " " +
-                                                        double.parse(
-                                                                userProvider
-                                                                    .curBalance)
-                                                            .toStringAsFixed(2),
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: Theme.of(context).colorScheme.black),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      : Container(),
-                                );
-                              }),
-                              isTimeSlot!
-                                  ? Card(
-                                      elevation: 0,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              getTranslated(
-                                                  context, 'PREFERED_TIME')!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1!.copyWith(color:  Theme.of(context).colorScheme.fontColor),
-                                            ),
-                                          ),
-                                          Divider(),
-                                          Container(
-                                            height: 90,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            child: ListView.builder(
-                                                shrinkWrap: true,
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemCount: int.parse(allowDay!),
-                                                itemBuilder: (context, index) {
-                                                  return dateCell(index);
-                                                }),
-                                          ),
-                                          Divider(),
-                                          ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              itemCount: timeModel.length,
-                                              itemBuilder: (context, index) {
-                                                return timeSlotItem(index);
-                                              })
-                                        ],
-                                      ),
-                                    )
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    getTranslated(context, 'SUBTOTAL')!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .lightBlack2),
+                                  ),
+                                  Text(
+                                    CUR_CURRENCY! +
+                                        " " +
+                                        oriPrice.toStringAsFixed(2),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .fontColor,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    getTranslated(context, 'DELIVERY_CHARGE')!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .lightBlack2),
+                                  ),
+                                  Text(
+                                    CUR_CURRENCY! +
+                                        " " +
+                                        delCharge.toStringAsFixed(2),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .fontColor,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              isPromoValid!
+                                  ? Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    getTranslated(
+                                        context, 'PROMO_CODE_DIS_LBL')!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .lightBlack2),
+                                  ),
+                                  Text(
+                                    CUR_CURRENCY! +
+                                        " " +
+                                        promoAmt.toStringAsFixed(2),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .fontColor,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )
                                   : Container(),
-                              isPayLayShow!
-                                  ? Card(
-                                      elevation: 0,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              getTranslated(
-                                                  context, 'SELECT_PAYMENT')!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1!.copyWith(color:  Theme.of(context).colorScheme.fontColor),
-                                            ),
-                                          ),
-                                          Divider(),
-                                          ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              itemCount:
-                                                  paymentMethodList.length,
-                                              itemBuilder: (context, index) {
-                                                if (index == 0 && cod)
-                                                  return paymentItem(index);
-                                                // else if (index == 1 && paypal)
-                                                //   return paymentItem(index);
-                                                // else if (index == 2 && paumoney)
-                                                //   return paymentItem(index);
-                                                // else if (index == 3 && razorpay)
-                                                //   return paymentItem(index);
-                                                // else if (index == 4 && paystack)
-                                                //   return paymentItem(index);
-                                                // else if (index == 5 &&
-                                                //     flutterwave)
-                                                //   return paymentItem(index);
-                                                // else if (index == 6 && stripe)
-                                                //   return paymentItem(index);
-                                                // else if (index == 7 && paytm)
-                                                //   return paymentItem(index);
-                                                // else if (index == 8 && gpay)
-                                                //   return paymentItem(index);
-                                                // else if (index == 9 &&
-                                                //     bankTransfer)
-                                                //   return paymentItem(index);
-                                                else
-                                                  return Container();
-                                              }),
-                                        ],
-                                      ),
-                                    )
-                                  : Container()
+                              isUseWallet!
+                                  ? Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    getTranslated(context, 'WALLET_BAL')!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .lightBlack2),
+                                  ),
+                                  Text(
+                                    CUR_CURRENCY! +
+                                        " " +
+                                        usedBal.toStringAsFixed(2),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .fontColor,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )
+                                  : Container(),
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      getTranslated(context, 'TOTAL_PRICE')!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2!
+                                          .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .lightBlack2),
+                                    ),
+                                    Text(
+                                      CUR_CURRENCY! +
+                                          " ${totalPrice.toStringAsFixed(2)}",
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .fontColor,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  /* decoration: BoxDecoration(
+                                    color: colors.primary.withOpacity(0.1),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                  ),*/
+                                  child: TextField(
+                                    controller: noteC,
+                                    style:
+                                    Theme.of(context).textTheme.subtitle2,
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 10),
+                                      border: InputBorder.none,
+                                      filled: true,
+                                      fillColor:
+                                      colors.primary.withOpacity(0.1),
+                                      //isDense: true,
+                                      hintText: getTranslated(context, 'NOTE'),
+                                    ),
+                                  )),
                             ],
                           ),
                         ),
-                      ),
-                      SimBtn(
-                        size: 0.8,
-                        title: getTranslated(context, 'DONE'),
-                        onBtnSelected: () {
+                      ]),
+                  actions: <Widget>[
+                    new TextButton(
+                        child: Text(getTranslated(context, 'CANCEL')!,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.lightBlack,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold)),
+                        onPressed: () {
+                          // checkoutState!(() {
+                          _placeOrder = true;
+                          // });
                           Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  ),
-                )
-          : noInternet(context),
-    );
+                        }),
+                    new TextButton(
+                        child: Text(getTranslated(context, 'DONE')!,
+                            style: TextStyle(
+                                color: colors.primary,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold)),
+                        onPressed: () {
+                          Navigator.pop(context);
+
+                          placeOrder('');///Only COD available now
+                          // doPayment();
+                        })
+                  ],
+                )),
+          );
+        },
+        transitionDuration: Duration(milliseconds: 200),
+        barrierDismissible: false,
+        barrierLabel: '',
+        context: context,
+        pageBuilder: (context, animation1, animation2) {
+          return Container();
+        });
+  }
+
+  Future<void> addTransaction(String? tranId, String orderID, String? status,
+      String? msg, bool redirect) async {
+    try {
+      var parameter = {
+        USER_ID: CUR_USERID,
+        ORDER_ID: orderID,
+        TYPE: payMethod,
+        TXNID: tranId,
+        AMOUNT: totalPrice.toString(),
+        STATUS: status,
+        MSG: msg
+      };
+      Response response =
+      await post(addTransactionApi, body: parameter, headers: headers)
+          .timeout(Duration(seconds: timeOut));
+
+      var getdata = json.decode(response.body);
+
+      bool error = getdata["error"];
+      String? msg1 = getdata["message"];
+      if (!error) {
+        if (redirect) {
+          // CUR_CART_COUNT = "0";
+
+          context.read<UserProvider>().setCartCount("0");
+          clearAll();
+
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => OrderSuccess()),
+              ModalRoute.withName('/home'));
+        }
+      } else {
+        setSnackbar(msg1!);
+      }
+    } on TimeoutException catch (_) {
+      setSnackbar(getTranslated(context, 'somethingMSg')!);
+    }
+  }
+
+  Future<void> placeOrder(String? tranId) async {
+    _isNetworkAvail = await isNetworkAvailable();
+    if (_isNetworkAvail) {
+      context.read<CartProvider>().setProgress(true);
+
+      SettingProvider settingsProvider =
+      Provider.of<SettingProvider>(this.context, listen: false);
+
+      String? mob = settingsProvider.mobile;
+
+      String? varientId, quantity;
+
+      List<SectionModel> cartList = context.read<CartProvider>().cartList;
+      for (SectionModel sec in cartList) {
+        varientId = varientId != null
+            ? varientId + "," + sec.varientId!
+            : sec.varientId;
+        quantity = quantity != null ? quantity + "," + sec.qty! : sec.qty;
+      }
+      String payVia = "COD";
+      // if (payMethod == getTranslated(context, 'COD_LBL'))
+      //   payVia = "COD";
+      // else if (payMethod == getTranslated(context, 'PAYPAL_LBL'))
+      //   payVia = "PayPal";
+      // else if (payMethod == getTranslated(context, 'PAYUMONEY_LBL'))
+      //   payVia = "PayUMoney";
+      // else if (payMethod == getTranslated(context, 'RAZORPAY_LBL'))
+      //   payVia = "RazorPay";
+      // else if (payMethod == getTranslated(context, 'PAYSTACK_LBL'))
+      //   payVia = "Paystack";
+      // else if (payMethod == getTranslated(context, 'FLUTTERWAVE_LBL'))
+      //   payVia = "Flutterwave";
+      // else
+      if (payMethod == getTranslated(context, 'STRIPE_LBL'))
+        payVia = "Stripe";
+      else{
+        payVia = "COD";
+      }
+      // else if (payMethod == getTranslated(context, 'PAYTM_LBL'))
+      //   payVia = "Paytm";
+      // else if (payMethod == "Wallet")
+      //   payVia = "Wallet";
+      // else if (payMethod == getTranslated(context, 'BANKTRAN'))
+      //   payVia = "bank_transfer";
+      try {
+        var parameter = {
+          USER_ID: CUR_USERID,
+          MOBILE: mob,
+          PRODUCT_VARIENT_ID: varientId,
+          QUANTITY: quantity,
+          TOTAL: oriPrice.toString(),
+          FINAL_TOTAL: totalPrice.toString(),
+          DEL_CHARGE: delCharge.toString(),
+          // TAX_AMT: taxAmt.toString(),
+          TAX_PER: taxPer.toString(),
+
+          PAYMENT_METHOD: payVia,
+          ADD_ID: selAddress,
+          ISWALLETBALUSED: isUseWallet! ? "1" : "0",
+          WALLET_BAL_USED: usedBal.toString(),
+          ORDER_NOTE: noteC.text
+        };
+
+        if (isTimeSlot!) {
+          parameter[DELIVERY_TIME] = selTime ?? 'Anytime';
+          parameter[DELIVERY_DATE] = selDate ?? '';
+        }
+        if (isPromoValid!) {
+          parameter[PROMOCODE] = promocode;
+          parameter[PROMO_DIS] = promoAmt.toString();
+        }
+
+        if (payMethod == getTranslated(context, 'PAYPAL_LBL')) {
+          parameter[ACTIVE_STATUS] = WAITING;
+        } else if (payMethod == getTranslated(context, 'STRIPE_LBL')) {
+          if (tranId == "succeeded")
+            parameter[ACTIVE_STATUS] = PLACED;
+          else
+            parameter[ACTIVE_STATUS] = WAITING;
+        } else if (payMethod == getTranslated(context, 'BANKTRAN')) {
+          parameter[ACTIVE_STATUS] = WAITING;
+        }
+
+        Response response =
+        await post(placeOrderApi, body: parameter, headers: headers)
+            .timeout(Duration(seconds: timeOut));
+        _placeOrder = true;
+        if (response.statusCode == 200) {
+          var getdata = json.decode(response.body);
+          bool error = getdata["error"];
+          String? msg = getdata["message"];
+          if (!error) {
+            String orderId = getdata["order_id"].toString();
+            if (payMethod == getTranslated(context, 'RAZORPAY_LBL')) {
+              addTransaction(tranId, orderId, SUCCESS, msg, true);
+            } else if (payMethod == getTranslated(context, 'PAYPAL_LBL')) {
+              // paypalPayment(orderId);
+            } else if (payMethod == getTranslated(context, 'STRIPE_LBL')) {
+              addTransaction(stripePayId, orderId,
+                  tranId == "succeeded" ? PLACED : WAITING, msg, true);
+            } else if (payMethod == getTranslated(context, 'PAYSTACK_LBL')) {
+              addTransaction(tranId, orderId, SUCCESS, msg, true);
+            } else if (payMethod == getTranslated(context, 'PAYTM_LBL')) {
+              addTransaction(tranId, orderId, SUCCESS, msg, true);
+            } else {
+              context.read<UserProvider>().setCartCount("0");
+
+              clearAll();
+
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => OrderSuccess()),
+                  ModalRoute.withName('/home'));
+            }
+          } else {
+            setSnackbar(msg!);
+            context.read<CartProvider>().setProgress(false);
+          }
+        }
+      } on TimeoutException catch (_) {
+        if (mounted)
+          // checkoutState!(() {
+          _placeOrder = true;
+        // });
+        context.read<CartProvider>().setProgress(false);
+      }
+    } else {
+      if (mounted)
+        // checkoutState!(() {
+        _isNetworkAvail = false;
+      // });
+    }
+  }
+
+  clearAll() {
+    totalPrice = 0;
+    oriPrice = 0;
+
+    taxPer = 0;
+    delCharge = 0;
+    addressList.clear();
+    // cartList.clear();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      context.read<CartProvider>().setCartlist([]);
+      context.read<CartProvider>().setProgress(false);
+    });
+
+    promoAmt = 0;
+    remWalBal = 0;
+    usedBal = 0;
+    payMethod = '';
+    isPromoValid = false;
+    isUseWallet = false;
+    isPayLayShow = true;
+    selectedMethod = null;
   }
 
   setSnackbar(String msg) {
@@ -492,8 +1038,8 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
       try {
         var parameter = {TYPE: PAYMENT_METHOD, USER_ID: CUR_USERID};
         Response response =
-            await post(getSettingApi, body: parameter, headers: headers)
-                .timeout(Duration(seconds: timeOut));
+        await post(getSettingApi, body: parameter, headers: headers)
+            .timeout(Duration(seconds: timeOut));
 
         if (response.statusCode == 200) {
           var getdata = json.decode(response.body);
@@ -505,7 +1051,7 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
             var time_slot = data["time_slot_config"];
             allowDay = time_slot["allowed_days"];
             isTimeSlot =
-                time_slot["is_time_slots_enabled"] == "1" ? true : false;
+            time_slot["is_time_slots_enabled"] == "1" ? true : false;
             startingDate = time_slot["starting_date"];
             codAllowed = data["is_cod_allowed"] == 1 ? true : false;
 
@@ -560,34 +1106,34 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
 
             cod = codAllowed
                 ? payment["cod_method"] == "1"
-                    ? true
-                    : false
+                ? true
+                : false
                 : false;
             paypal = payment["paypal_payment_method"] == "1" ? true : false;
             paumoney =
-                payment["payumoney_payment_method"] == "1" ? true : false;
+            payment["payumoney_payment_method"] == "1" ? true : false;
             flutterwave =
-                payment["flutterwave_payment_method"] == "1" ? true : false;
+            payment["flutterwave_payment_method"] == "1" ? true : false;
             razorpay = payment["razorpay_payment_method"] == "1" ? true : false;
             paystack = payment["paystack_payment_method"] == "1" ? true : false;
             stripe = payment["stripe_payment_method"] == "1" ? true : false;
             paytm = payment["paytm_payment_method"] == "1" ? true : false;
             bankTransfer =
-                payment["direct_bank_transfer"] == "1" ? true : false;
+            payment["direct_bank_transfer"] == "1" ? true : false;
 
             // if (razorpay) razorpayId = payment["razorpay_key_id"];
             // if (paystack) {
-              // paystackId = payment["paystack_key_id"];
+            // paystackId = payment["paystack_key_id"];
 
-              // plugin.initialize(publicKey: paystackId!);
+            // plugin.initialize(publicKey: paystackId!);
             // }
             // if (stripe) {
             //   stripeId = payment['stripe_publishable_key'];
             //   stripeSecret = payment['stripe_secret_key'];
             //   stripeCurCode = payment['stripe_currency_code'];
             //   stripeMode = payment['stripe_mode'] ?? 'test';
-              // StripeService.secret = stripeSecret;
-              // StripeService.init(stripeId, stripeMode);
+            // StripeService.secret = stripeSecret;
+            // StripeService.init(stripeId, stripeMode);
             // }
             // if (paytm) {
             //   paytmMerId = payment['paytm_merchant_id'];

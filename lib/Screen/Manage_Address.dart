@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:eshop/Helper/SimBtn.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -13,11 +14,13 @@ import '../Helper/String.dart';
 import '../Model/User.dart';
 import 'Add_Address.dart';
 import 'Cart.dart';
+import 'Payment.dart';
 
 class ManageAddress extends StatefulWidget {
   final bool? home;
+  final bool isMyProfileClick;
 
-  const ManageAddress({Key? key, this.home}) : super(key: key);
+  const ManageAddress({Key? key, this.home,this.isMyProfileClick = false}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -31,8 +34,9 @@ class StateAddress extends State<ManageAddress> with TickerProviderStateMixin {
   AnimationController? buttonController;
   bool _isNetworkAvail = true;
   List<RadioModel> addModel = [];
+  StateSetter? checkoutState;
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+  GlobalKey<RefreshIndicatorState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -117,12 +121,12 @@ class StateAddress extends State<ManageAddress> with TickerProviderStateMixin {
           USER_ID: CUR_USERID,
         };
         Response response =
-            await post(getAddressApi, body: parameter, headers: headers)
-                .timeout(Duration(seconds: timeOut));
+        await post(getAddressApi, body: parameter, headers: headers)
+            .timeout(Duration(seconds: timeOut));
 
         var getdata = json.decode(response.body);
         bool error = getdata["error"];
-        // String msg = getdata["message"];
+        String msg = getdata["message"];
         if (!error) {
           var data = getdata["data"];
 
@@ -174,92 +178,111 @@ class StateAddress extends State<ManageAddress> with TickerProviderStateMixin {
     return Scaffold(
       key: _scaffoldKey,
       appBar: getSimpleAppBar( getTranslated(context, "SHIPP_ADDRESS")!,context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AddAddress(
-                      update: false,
-                      index: addressList.length,
-                    )),
-          );
-          if (mounted) {
-            setState(() {
-              addModel.clear();
-              addAddressModel();
-            });
-          }
-        },
-        child: const Icon(Icons.add),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 50),
+        child: FloatingActionButton(
+          onPressed: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddAddress(
+                    update: false,
+                    index: addressList.length,
+                  )),
+            );
+            if (mounted) {
+              setState(() {
+                addModel.clear();
+                addAddressModel();
+              });
+            }
+          },
+          child: const Icon(Icons.add),
+        ),
       ),
       backgroundColor: Theme.of(context).colorScheme.lightWhite,
       body: _isNetworkAvail
           ? Column(
+        children: [
+          Expanded(
+            child: _isLoading
+                ? shimmer(context)
+                : addressList.isEmpty
+                ? Center(
+                child: Text(getTranslated(context, 'NOADDRESS')!))
+                : Stack(
               children: [
-                Expanded(
-                  child: _isLoading
-                      ? shimmer(context)
-                      : addressList.isEmpty
-                          ? Center(
-                              child: Text(getTranslated(context, 'NOADDRESS')!))
-                          : Stack(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: RefreshIndicator(
-                                      key: _refreshIndicatorKey,
-                                      onRefresh: _refresh,
-                                      child: ListView.builder(
-                                          // shrinkWrap: true,
-                                          physics:
-                                              const AlwaysScrollableScrollPhysics(),
-                                          itemCount: addressList.length,
-                                          itemBuilder: (context, index) {
-                                            return addressItem(index);
-                                          })),
-                                ),
-                                showCircularProgress(
-                                    _isProgress, colors.primary),
-                              ],
-                            ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: RefreshIndicator(
+                      key: _refreshIndicatorKey,
+                      onRefresh: _refresh,
+                      child: ListView.builder(
+                        // shrinkWrap: true,
+                          physics:
+                          const AlwaysScrollableScrollPhysics(),
+                          itemCount: addressList.length,
+                          itemBuilder: (context, index) {
+                            return addressItem(index);
+                          })),
                 ),
-                // InkWell(
-                //   child: Container(
-                //       alignment: Alignment.center,
-                //       height: 55,
-                //       decoration:  const BoxDecoration(
-                //         gradient: LinearGradient(
-                //             begin: Alignment.topLeft,
-                //             end: Alignment.bottomRight,
-                //             colors: [colors.grad1Color, colors.grad2Color],
-                //             stops: [0, 1]),
-                //       ),
-                //       child: Text(getTranslated(context, 'ADDADDRESS')!,
-                //           style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                //                 color: Theme.of(context).colorScheme.white,
-                //               ))),
-                //   onTap: () async {
-                //     await Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //           builder: (context) => AddAddress(
-                //                 update: false,
-                //                 index: addressList.length,
-                //               )),
-                //     );
-                //     if (mounted) {
-                //       setState(() {
-                //         addModel.clear();
-                //         addAddressModel();
-                //       });
-                //     }
-                //   },
-                // )
+                showCircularProgress(
+                    _isProgress, colors.primary),
               ],
-            )
+            ),
+          ),
+          // InkWell(
+          //   child: Container(
+          //       alignment: Alignment.center,
+          //       height: 55,
+          //       decoration:  const BoxDecoration(
+          //         gradient: LinearGradient(
+          //             begin: Alignment.topLeft,
+          //             end: Alignment.bottomRight,
+          //             colors: [colors.grad1Color, colors.grad2Color],
+          //             stops: [0, 1]),
+          //       ),
+          //       child: Text(getTranslated(context, 'ADDADDRESS')!,
+          //           style: Theme.of(context).textTheme.subtitle1!.copyWith(
+          //                 color: Theme.of(context).colorScheme.white,
+          //               ))),
+          //   onTap: () async {
+          //     await Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => AddAddress(
+          //                 update: false,
+          //                 index: addressList.length,
+          //               )),
+          //     );
+          //     if (mounted) {
+          //       setState(() {
+          //         addModel.clear();
+          //         addAddressModel();
+          //       });
+          //     }
+          //   },
+          // )
+          if(widget.isMyProfileClick == false)
+          SimBtn(title: "Next",size: 0.9,onBtnSelected: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext
+                    context) =>
+                        Payment(
+                            updateCheckout,
+                            "")));
+          },)
+        ],
+      )
           : noInternet(context),
     );
+  }
+
+  updateCheckout() {
+    if (mounted) checkoutState!(() {});
   }
 
   Future<void> setAsDefault(int index) async {
@@ -271,8 +294,8 @@ class StateAddress extends State<ManageAddress> with TickerProviderStateMixin {
       };
 
       Response response =
-          await post(updateAddressApi, body: data, headers: headers)
-              .timeout(Duration(seconds: timeOut));
+      await post(updateAddressApi, body: data, headers: headers)
+          .timeout(Duration(seconds: timeOut));
 
       var getdata = json.decode(response.body);
 
@@ -298,6 +321,7 @@ class StateAddress extends State<ManageAddress> with TickerProviderStateMixin {
       setSnackbar(getTranslated(context, 'somethingMSg')!);
     }
   }
+
 
   addressItem(int index) {
 
@@ -350,8 +374,8 @@ class StateAddress extends State<ManageAddress> with TickerProviderStateMixin {
           ID: addressList[index].id,
         };
         Response response =
-            await post(deleteAddressApi, body: parameter, headers: headers)
-                .timeout(Duration(seconds: timeOut));
+        await post(deleteAddressApi, body: parameter, headers: headers)
+            .timeout(Duration(seconds: timeOut));
 
         var getdata = json.decode(response.body);
         bool error = getdata["error"];
@@ -417,7 +441,7 @@ class StateAddress extends State<ManageAddress> with TickerProviderStateMixin {
       addModel.add(RadioModel(
           isSelected: i == selectedAddress ? true : false,
           name: "${addressList[i].name!}, ${addressList[i].mobile!}",
-          add: "${addressList[i].address!}, ${addressList[i].area!}, ${addressList[i].city!}, ${addressList[i].state!}, ${addressList[i].country!}, ${addressList[i].pincode!}",
+          add: "${addressList[i].address!}, ${addressList[i].area!}, ${addressList[i].city!}, ${addressList[i].pincode!}",
           addItem: addressList[i],
           show: !widget.home!,
           onSetDefault: () {

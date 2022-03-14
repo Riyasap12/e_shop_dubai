@@ -705,10 +705,10 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                     _fieldFocusChange(context, addFocus!, locationFocus);
                   },
                   decoration: InputDecoration(
-                    label: Text(getTranslated(context, "ADDRESS_LBL")!),
+                    label: Text(getTranslated(context, "LOCATION")!),
                     fillColor: Theme.of(context).colorScheme.white,
                     isDense: true,
-                    hintText: getTranslated(context, 'ADDRESS_LBL'),
+                    hintText: getTranslated(context, 'LOCATION'),
                     border: InputBorder.none,
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -1335,9 +1335,9 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                           // setLandmark(),
                           setCities(),
                           setArea(),
-                          setPincode(),
-                          setStateField(),
-                          setCountry(),
+                          // setPincode(),
+                          // setStateField(),
+                          // setCountry(),
                           typeOfAddress(),
                           defaultAdd(),
                           // addBtn(),

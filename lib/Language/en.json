@@ -233,6 +233,7 @@
   "PWD_REQUIRED": "Password is Required",
   "PWD_LENGTH": "password should be more then 6 char long",
   "FIELD_REQUIRED": "This Field is Required",
+  "LOCATION": "Location",
   "EMAIL_REQUIRED": "Email is Required",
   "VALID_EMAIL": "Please enter a valid email Address",
   "somethingMSg": "Something went wrong. Please try again after some time",

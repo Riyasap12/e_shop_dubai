@@ -13,27 +13,28 @@ import 'ProductList.dart';
 
 
 
-class AllCategory extends StatelessWidget {
+class AllCategory extends StatefulWidget {
+  @override
+  State<AllCategory> createState() => _AllCategoryState();
+}
 
+class _AllCategoryState extends State<AllCategory> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _openDrawer() {
+    print("press1");
+    _scaffoldKey.currentState?.openDrawer();
+    print("press");
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Row(
+      key: _scaffoldKey,
+      drawer: drawer(context),
+        body: Row(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-                flex: 1,
-                child: Container(
-                    color: Theme.of(context).colorScheme.gray,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      padding: EdgeInsetsDirectional.only(top: 10.0),
-                      itemCount: catList.length,
-                      itemBuilder: (context, index) {
-                        return catItem(index, context);
-                      },
-                    ))),
+
             Expanded(
               flex: 3,
               child:
@@ -43,33 +44,43 @@ class AllCategory extends StatelessWidget {
                 children: [
                   Selector<CategoryProvider, int>(
                     builder: (context, data, child) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8,right: 8,left: 8),
+                            child: Row(
                               children: [
-                                Text(catList[data].name!+" "),
+
                                 Expanded(
                                     child: Divider(
                                       thickness: 2,
-                                    ))
+                                    )),
+                                Text(catList[data].name!+" "),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text(
-                                getTranslated(context, 'All')! +
-                                    " " +
-                                    catList[data].name! +
-                                    " ",
-                                style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).colorScheme.fontColor,
-                              ),
-                            ))
-                          ],
-                        ),
+                          ),
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(height: 35,
+                                  margin: EdgeInsets.only(bottom: 8),
+                                  padding: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(color: colors.primary_app,borderRadius: BorderRadius.only(topRight: Radius.circular(24),bottomRight: Radius.circular(24))),
+                                  child: IconButton(padding: EdgeInsets.zero,onPressed:()=> _openDrawer(), icon: Icon(Icons.menu,color: Colors.white,))),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 8),
+                                child: Text(
+                                  getTranslated(context, 'All')! +
+                                      " " +
+                                      catList[data].name! +
+                                      " ",
+                                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).colorScheme.fontColor,
+                                ),
+                              )),
+                            ],
+                          )
+                        ],
                       );
                     },
                     selector: (_, cat) => cat.curCat,
@@ -81,7 +92,7 @@ class AllCategory extends StatelessWidget {
 
                           return data.length > 0
                               ? GridView.count(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              padding: EdgeInsets.symmetric(horizontal: 4),
                               crossAxisCount: 3,
                               shrinkWrap: true,
                               childAspectRatio: .6,
@@ -100,6 +111,26 @@ class AllCategory extends StatelessWidget {
             ),
           ],
         ));
+  }
+
+  Widget drawer(context){
+    return Container(
+      width: 100,
+      child: Drawer(elevation: 0,
+        child: Container(
+            color: Theme.of(context).colorScheme.gray,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              padding: EdgeInsetsDirectional.only(top: 10.0),
+              itemCount: catList.length,
+              itemBuilder: (context, index) {
+                return catItem(index, context);
+              },
+            )
+        ),
+      ),
+    );
   }
 
   Widget catItem(int index, BuildContext context1) {
@@ -147,6 +178,7 @@ class AllCategory extends StatelessWidget {
             onTap: () {
               context1.read<CategoryProvider>().setCurSelected(index);
               context1.read<CategoryProvider>().setSubList(popularList);
+              Navigator.pop(context);
             },
           );
         } else {
@@ -199,6 +231,7 @@ class AllCategory extends StatelessWidget {
               ),
             ),
             onTap: () {
+              print("tap1");
               context1.read<CategoryProvider>().setCurSelected(index);
               if (catList[index].subList == null ||
                   catList[index].subList!.length == 0) {
@@ -215,11 +248,12 @@ class AllCategory extends StatelessWidget {
                           ),
                     ));
               } else {
-
+                print("tap3");
                 context1
                     .read<CategoryProvider>()
                     .setSubList(catList[index].subList);
               }
+              Navigator.pop(context);
             },
           );
         }
@@ -309,7 +343,6 @@ class AllCategory extends StatelessWidget {
       },
     );
   }
-
 }
 
 
