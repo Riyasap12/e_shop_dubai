@@ -98,6 +98,7 @@ class StatePreview extends State<ProductPreview> {
           widget.video == ""
               ? Container(
                   child: PhotoViewGallery.builder(
+                    key: UniqueKey(),
                   scrollPhysics: const BouncingScrollPhysics(),
                   builder: (BuildContext context, int index) {
                     return PhotoViewGalleryPageOptions(

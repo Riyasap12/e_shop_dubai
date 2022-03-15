@@ -181,7 +181,7 @@ class StateAddress extends State<ManageAddress> with TickerProviderStateMixin {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 50),
-        child: FloatingActionButton(
+        child: FloatingActionButton(heroTag: "addButton",
           onPressed: () async {
             await Navigator.push(
               context,

@@ -63,11 +63,16 @@ class _AllCategoryState extends State<AllCategory> {
                           ),
                           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(height: 35,
+                              Container(//height: 35,
                                   margin: EdgeInsets.only(bottom: 8),
-                                  padding: EdgeInsets.only(right: 8),
+                                  padding: EdgeInsets.only(right: 12,top: 8,bottom: 8,left: 4),
                                   decoration: BoxDecoration(color: colors.primary_app,borderRadius: BorderRadius.only(topRight: Radius.circular(24),bottomRight: Radius.circular(24))),
-                                  child: IconButton(padding: EdgeInsets.zero,onPressed:()=> _openDrawer(), icon: Icon(Icons.menu,color: Colors.white,))),
+                                  child: Column(
+                                    children: [
+                                      IconButton(padding: EdgeInsets.zero,constraints: BoxConstraints(maxHeight: 25),onPressed:()=> _openDrawer(), icon: Icon(Icons.menu,color: Colors.white,)),
+                                    Text("Menu",style: TextStyle(fontWeight: FontWeight.w600,fontSize: 12,color: Colors.white),)
+                                    ],
+                                  )),
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 8),
                                 child: Text(
