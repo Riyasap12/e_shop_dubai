@@ -216,9 +216,9 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                       selector: (_, provider) => provider.email,
                       builder: (context, userEmail, child) {
                         emailController =
-                            TextEditingController(text: userEmail);
-                        return userEmail != ""
-                            ? Text(
+                            TextEditingController(text: (userEmail.contains("tamyeezbidiya"))?"":userEmail);
+                        return userEmail != ""?
+                            (userEmail.contains("tamyeezbidiya"))?Container(height: 0,): Text(
                                 userEmail,
                                 style: Theme.of(context)
                                     .textTheme
@@ -967,7 +967,7 @@ class StateProfile extends State<MyProfile> with TickerProviderStateMixin {
                       Selector<UserProvider, String>(
                           selector: (_, provider) => provider.email,
                           builder: (context, userEmail, child) {
-                            return setEmailField(userEmail);
+                            return setEmailField(userEmail.contains("tamyeezbidiya")?"":userEmail);
                           }),
                       saveButton(getTranslated(context, "SAVE_LBL")!, () {
                         validateAndSave(_changeUserDetailsKey);

@@ -76,7 +76,7 @@ class _ChangeLanguageState extends State<ChangeLanguage>  with TickerProviderSta
                       children: [
                         Align(
                           alignment: Alignment.center,
-                          child: Text("Choose Language",
+                          child: Text(getTranslated(context, 'CHOOSELANGUAGE') ?? "Choose Language",
                               style: Theme.of(context).textTheme.subtitle1!.copyWith(
                                   color: colors.grad1Color, fontWeight: FontWeight.bold,fontSize: 25)),
                         ),
@@ -117,7 +117,7 @@ class _ChangeLanguageState extends State<ChangeLanguage>  with TickerProviderSta
                                ),
                              ),
                              SizedBox(width: 16,),
-                             Text("Arabic",style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                             Text(getTranslated(context, 'ARABIC_LAN') ?? "Arabic",style: Theme.of(context).textTheme.subtitle1!.copyWith(
                                  color: colors.red, fontWeight: FontWeight.bold,fontSize: 20)),
                            ],
                          ),
@@ -160,7 +160,7 @@ class _ChangeLanguageState extends State<ChangeLanguage>  with TickerProviderSta
                                   ),
                                 ),
                                 SizedBox(width: 16,),
-                                Text("English",style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                                Text(getTranslated(context, 'ENGLISH_LAN') ?? "English",style: Theme.of(context).textTheme.subtitle1!.copyWith(
                                     color: colors.red, fontWeight: FontWeight.bold,fontSize: 20)),
                               ],
                             ),
@@ -168,7 +168,7 @@ class _ChangeLanguageState extends State<ChangeLanguage>  with TickerProviderSta
                         ),
                         SizedBox(height: 20,),
                         AppBtn(
-                          title: "Next",
+                          title: getTranslated(context, "NEXT_LBL") ?? "Next",
                           btnAnim: buttonSqueezeanimation,
                           btnCntrl: buttonController,
                           onBtnSelected: () {

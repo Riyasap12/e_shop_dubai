@@ -146,7 +146,7 @@ class _AllCategoryState extends State<AllCategory> {
         if (index == 0 && (popularList.length > 0)) {
           return GestureDetector(
             child: Container(
-              height: 100,
+              height: 75,
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
                   color: data == index ? Theme.of(context).colorScheme.white : Colors.transparent,
@@ -161,7 +161,7 @@ class _AllCategoryState extends State<AllCategory> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(25.0),
                         child: SvgPicture.asset(data == index
@@ -190,7 +190,7 @@ class _AllCategoryState extends State<AllCategory> {
 
           return GestureDetector(
             child: Container(
-              height: 100,
+              height: 75,
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
                   color: data == index ? Theme.of(context).colorScheme.white : Colors.transparent,
@@ -206,7 +206,7 @@ class _AllCategoryState extends State<AllCategory> {
                 children: <Widget>[
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(25.0),
                           child: FadeInImage(

@@ -11,7 +11,7 @@ import flutter_downloader
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    GMSServices.provideAPIKey("AIzaSyBPVoSISKwgTjtZdN8Ks4DcP6mW8sp4ZEo")
+    GMSServices.provideAPIKey("AIzaSyCGkpG6fKdiKxs71P5rc8f3cUI9IDUy8dE")
     GeneratedPluginRegistrant.register(with: self)
       
     if(FirebaseApp.app() == nil){

@@ -130,6 +130,7 @@ class _SendOtpState extends State<SendOtp> with TickerProviderStateMixin {
   }
 
   Future<void> getVerifyUser() async {
+
     try {
       var data = {MOBILE: mobile};
       Response response =
@@ -328,6 +329,7 @@ class _SendOtpState extends State<SendOtp> with TickerProviderStateMixin {
         btnAnim: buttonSqueezeanimation,
         btnCntrl: buttonController,
         onBtnSelected: () async {
+          FocusScope.of(context).unfocus();
           validateAndSubmit();
         });
   }

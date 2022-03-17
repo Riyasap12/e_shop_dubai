@@ -487,6 +487,7 @@ class _LoginPageState extends State<Login> with TickerProviderStateMixin {
       btnAnim: buttonSqueezeanimation,
       btnCntrl: buttonController,
       onBtnSelected: () async {
+        FocusScope.of(context).unfocus();
         validateAndSubmit();
       },
     );

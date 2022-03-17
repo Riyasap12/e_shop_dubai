@@ -47,6 +47,7 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
       isDefault;
   bool checkedDefault = false, isArea = false;
   bool _isProgress = false;
+  bool isLoading = false;
   StateSetter? areaState, cityState;
 
   //bool _isLoading = false;
@@ -710,15 +711,24 @@ class StateAddress extends State<AddAddress> with TickerProviderStateMixin {
                     isDense: true,
                     hintText: getTranslated(context, 'LOCATION'),
                     border: InputBorder.none,
-                    suffixIcon: IconButton(
+                    suffixIcon: isLoading
+                        ?Container(height: 50,width: 50,padding: EdgeInsets.all(12),child: CircularProgressIndicator())
+                        :IconButton(
                       icon: Icon(
                         Icons.my_location,
                         color: colors.primary,
                       ),
                       focusNode: locationFocus,
                       onPressed: () async {
+                        isLoading = true;
+                        setState(() {
+                        });
                         Position position = await Geolocator.getCurrentPosition(
                             desiredAccuracy: LocationAccuracy.bestForNavigation);
+                        isLoading = false;
+                        setState(() {
+
+                        });
 
                         await Navigator.push(
                             context,

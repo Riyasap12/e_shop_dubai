@@ -178,7 +178,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
       var data = {
         MOBILE: mobile,
         NAME: name,
-        EMAIL: email,
+        EMAIL: (name?.replaceAll(" ", "") ?? "abc")+ (mobile ?? "123")+"@tamyeezbidiya.com",
         PASSWORD: password,
         COUNTRY_CODE: countrycode,
         REFERCODE: referCode,
@@ -306,13 +306,13 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
         controller: emailController,
         style:
         TextStyle(color: Theme.of(context).colorScheme.fontColor, fontWeight: FontWeight.normal),
-        validator: (val) => validateEmail(
-            val!,
-            getTranslated(context, 'EMAIL_REQUIRED'),
-            getTranslated(context, 'VALID_EMAIL')),
-        onSaved: (String? value) {
-          email = value;
-        },
+        // validator: (val) => validateEmail(
+        //     val!,
+        //     getTranslated(context, 'EMAIL_REQUIRED'),
+        //     getTranslated(context, 'VALID_EMAIL')),
+        // onSaved: (String? value) {
+        //   email = value;
+        // },
         onFieldSubmitted: (v) {
           _fieldFocusChange(context, emailFocus!, passFocus);
         },
@@ -468,6 +468,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
       btnAnim: buttonSqueezeanimation,
       btnCntrl: buttonController,
       onBtnSelected: () async {
+        FocusScope.of(context).unfocus();
         validateAndSubmit();
       },
     );
@@ -540,7 +541,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
                       children: <Widget>[
                         registerTxt(),
                         setUserName(),
-                        setEmail(),
+                        // setEmail(),
                         setPass(),
                         setRefer(),
                         showPass(),
@@ -672,7 +673,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
                       ),
                       registerTxt(),
                       setUserName(),
-                      setEmail(),
+                      // setEmail(),
                       setPass(),
                       setRefer(),
                       //showPass(),
