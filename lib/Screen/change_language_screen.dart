@@ -65,9 +65,9 @@ class _ChangeLanguageState extends State<ChangeLanguage>  with TickerProviderSta
                 child: Container(
                   alignment: Alignment.center,
                   color: Theme.of(context).colorScheme.white,
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom * 0.8),
-                  height: MediaQuery.of(context).size.height * 0.5,
+                  // padding: EdgeInsets.only(
+                  //     bottom: MediaQuery.of(context).viewInsets.bottom * 0.8),
+                  height: MediaQuery.of(context).size.height * 0.6,
                   width: MediaQuery.of(context).size.width * 0.95,
 
                   child: Padding(
@@ -190,7 +190,7 @@ class _ChangeLanguageState extends State<ChangeLanguage>  with TickerProviderSta
               left: (MediaQuery.of(context).size.width / 2) - 49,
               // right: ((MediaQuery.of(context).size.width /2)-55),
 
-              top: (MediaQuery.of(context).size.height * 0.2-15
+              top: (MediaQuery.of(context).size.height * 0.16-15
               ),
               //  bottom: height * 0.1,
               child: SizedBox(
