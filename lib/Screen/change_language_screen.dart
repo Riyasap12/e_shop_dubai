@@ -50,7 +50,8 @@ class _ChangeLanguageState extends State<ChangeLanguage>  with TickerProviderSta
       backgroundColor:Theme.of(context).colorScheme.white,
       body: Container(
         decoration: back(),
-        child: Stack(
+        child:
+        Stack(
           children: [
             Image.asset(
               'assets/images/doodle.png',
@@ -59,149 +60,150 @@ class _ChangeLanguageState extends State<ChangeLanguage>  with TickerProviderSta
               height: double.infinity,
             ),
 
-            Center(
-              child: ClipPath(
-                clipper: ContainerClipper(),
-                child: Container(
-                  alignment: Alignment.center,
-                  color: Theme.of(context).colorScheme.white,
-                  // padding: EdgeInsets.only(
-                  //     bottom: MediaQuery.of(context).viewInsets.bottom * 0.8),
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  width: MediaQuery.of(context).size.width * 0.95,
-
-                  child: Padding(
-                      padding: const EdgeInsets.only(left: 15,right: 15,top: 90,bottom: 25),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(getTranslated(context, 'CHOOSELANGUAGE') ?? "Choose Language",
-                              style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                  color: colors.grad1Color, fontWeight: FontWeight.bold,fontSize: 25)),
-                        ),
-                       SizedBox(height: 20,),
-                       InkWell(
-                         onTap: (){
-                           _changeLan('ar', context);
-                           setState(() {
-                             selectedIndex =0;
-                           });
-                         },
-                         child: Container(
-                         padding: EdgeInsets.symmetric(horizontal: 24,vertical: 10),
-                         decoration: BoxDecoration(color: colors.grad1Color,borderRadius: BorderRadius.circular(16)),
-                         child: Row(
-                           children: [
-                             Container(
-                               height: 25.0,
-                               decoration: BoxDecoration(
-                                   shape: BoxShape.circle,
-                                   color: selectedIndex == 0
-                                       ? Colors.green
-                                       : Theme.of(context).colorScheme.white,
-                                   border: Border.all(color: colors.grad1Color)),
-                               child: Padding(
-                                 padding: const EdgeInsets.all(2.0),
-                                 child: selectedIndex == 0
-                                     ? Icon(
-                                   Icons.check,
-                                   size: 17.0,
-                                   color: Theme.of(context).colorScheme.gray,
-                                 )
-                                     : Icon(
-                                   Icons.check_box_outline_blank,
-                                   size: 15.0,
-                                   color: Theme.of(context).colorScheme.white,
-                                 ),
-                               ),
-                             ),
-                             SizedBox(width: 16,),
-                             Text(getTranslated(context, 'ARABIC_LAN') ?? "Arabic",style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                 color: colors.red, fontWeight: FontWeight.bold,fontSize: 20)),
-                           ],
-                         ),
-                         ),
-                       ),
-                        SizedBox(height: 20,),
-                        InkWell(
-                          onTap: (){
-                            _changeLan('en', context);
-                            setState(() {
-                              selectedIndex =1;
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 24,vertical: 10),
-                            decoration: BoxDecoration(color: colors.grad1Color,borderRadius: BorderRadius.circular(16)),
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: 25.0,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: selectedIndex == 1
-                                          ? Colors.green
-                                          : Theme.of(context).colorScheme.white,
-                                      border: Border.all(color: colors.grad1Color)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: selectedIndex == 1
-                                        ? Icon(
-                                      Icons.check,
-                                      size: 17.0,
-                                      color: Theme.of(context).colorScheme.gray,
-                                    )
-                                        : Icon(
-                                      Icons.check_box_outline_blank,
-                                      size: 15.0,
-                                      color: Theme.of(context).colorScheme.white,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 16,),
-                                Text(getTranslated(context, 'ENGLISH_LAN') ?? "English",style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                    color: colors.red, fontWeight: FontWeight.bold,fontSize: 20)),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20,),
-                        AppBtn(
-                          title: getTranslated(context, "NEXT_LBL") ?? "Next",
-                          btnAnim: buttonSqueezeanimation,
-                          btnCntrl: buttonController,
-                          onBtnSelected: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => IntroSlider(),
-                                ));
-                          },
-                        )
-                      ],
+            Transform.translate(
+              offset: Offset(0,-50),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Transform.translate(
+                    offset: Offset(0, 50),
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: SvgPicture.asset(
+                        'assets/images/loginlogo.svg',
+                        // color: Colors.blue,
+                      ),
                     ),
                   ),
-                ),
+                  Center(
+                    child: ClipPath(
+                      clipper: ContainerClipper(),
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: Theme.of(context).colorScheme.white,
+                        // margin: EdgeInsets.only(
+                        //     bottom: MediaQuery.of(context).size.width*.2,left: 30,right: 30,top: 60),
+                        // height: MediaQuery.of(context).size.height * 0.6,
+                        width: MediaQuery.of(context).size.width * 0.95,
+
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 15,right: 15,top: 90,bottom: 25),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: Text(getTranslated(context, 'CHOOSELANGUAGE') ?? "Choose Language",
+                                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                                        color: colors.grad1Color, fontWeight: FontWeight.bold,fontSize: 25)),
+                              ),
+                              SizedBox(height: 20,),
+                              InkWell(
+                                onTap: (){
+                                  _changeLan('ar', context);
+                                  setState(() {
+                                    selectedIndex =0;
+                                  });
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 24,vertical: 10),
+                                  decoration: BoxDecoration(color: colors.grad1Color,borderRadius: BorderRadius.circular(16)),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: 25.0,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: selectedIndex == 0
+                                                ? Colors.green
+                                                : Theme.of(context).colorScheme.white,
+                                            border: Border.all(color: colors.grad1Color)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: selectedIndex == 0
+                                              ? Icon(
+                                            Icons.check,
+                                            size: 17.0,
+                                            color: Theme.of(context).colorScheme.gray,
+                                          )
+                                              : Icon(
+                                            Icons.check_box_outline_blank,
+                                            size: 15.0,
+                                            color: Theme.of(context).colorScheme.white,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 16,),
+                                      Text(getTranslated(context, 'ARABIC_LAN') ?? "Arabic",style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                                          color: colors.red, fontWeight: FontWeight.bold,fontSize: 20)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 20,),
+                              InkWell(
+                                onTap: (){
+                                  _changeLan('en', context);
+                                  setState(() {
+                                    selectedIndex =1;
+                                  });
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 24,vertical: 10),
+                                  decoration: BoxDecoration(color: colors.grad1Color,borderRadius: BorderRadius.circular(16)),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: 25.0,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: selectedIndex == 1
+                                                ? Colors.green
+                                                : Theme.of(context).colorScheme.white,
+                                            border: Border.all(color: colors.grad1Color)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: selectedIndex == 1
+                                              ? Icon(
+                                            Icons.check,
+                                            size: 17.0,
+                                            color: Theme.of(context).colorScheme.gray,
+                                          )
+                                              : Icon(
+                                            Icons.check_box_outline_blank,
+                                            size: 15.0,
+                                            color: Theme.of(context).colorScheme.white,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 16,),
+                                      Text(getTranslated(context, 'ENGLISH_LAN') ?? "English",style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                                          color: colors.red, fontWeight: FontWeight.bold,fontSize: 20)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 20,),
+                              AppBtn(
+                                title: getTranslated(context, "NEXT_LBL") ?? "Next",
+                                btnAnim: buttonSqueezeanimation,
+                                btnCntrl: buttonController,
+                                onBtnSelected: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => IntroSlider(),
+                                      ));
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Positioned(
-              // textDirection: Directionality.of(context),
-              left: (MediaQuery.of(context).size.width / 2) - 49,
-              // right: ((MediaQuery.of(context).size.width /2)-55),
-
-              top: (MediaQuery.of(context).size.height * 0.16-15
-              ),
-              //  bottom: height * 0.1,
-              child: SizedBox(
-                width: 100,
-                height: 100,
-                child: SvgPicture.asset(
-                  'assets/images/loginlogo.svg',
-                  // color: Colors.blue,
-                ),
-              ),
-            )
           ],
         ),
       ),
