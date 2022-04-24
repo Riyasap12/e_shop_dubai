@@ -178,7 +178,7 @@ class _SignUpPageState extends State<SignUp> with TickerProviderStateMixin {
       var data = {
         MOBILE: mobile,
         NAME: name,
-        EMAIL: (name?.replaceAll(" ", "") ?? "abc")+ (mobile ?? "123")+"@tamyeezbidiya.com",
+        EMAIL: (mobile?.substring(1) ?? "123")+"@tamyeezbidiya.com",
         PASSWORD: password,
         COUNTRY_CODE: countrycode,
         REFERCODE: referCode,

@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
+import 'dart:math' hide log;
 
 import 'package:eshop/Helper/ApiBaseHelper.dart';
 import 'package:eshop/Helper/AppBtn.dart';
@@ -1570,7 +1571,9 @@ class _HomePageState extends State<HomePage>
       String? msg = getdata["message"];
       if (!error) {
         var data = getdata["data"];
+        print("~Log");
 
+        log(data.toString());
         catList =
             (data as List).map((data) => new Product.fromCat(data)).toList();
 
